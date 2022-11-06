@@ -17,6 +17,18 @@ export class PlantUmlErdGenerator {
       await fs.writeFile('/tmp/example.json', JSON.stringify(dmmf, null, 2));
     }
     const results = ['@startuml example', 'skinparam linetype ortho'];
+
+    results.push(...this.drawEntities(dmmf));
+
+    results.push(...this.drawRelations(dmmf));
+
+    results.push('@enduml');
+
+    await fs.writeFile(this.config.output, results.join('\n'));
+  }
+
+  private drawEntities(dmmf: DMMF.Document) {
+    const results: string[] = [];
     for (const model of dmmf.datamodel.models) {
       const idField = model.fields.find((f) => f.isId);
       const name = this.config.usePhysicalTableName ? model.dbName : model.name;
@@ -39,7 +51,11 @@ export class PlantUmlErdGenerator {
       results.push(`}`);
       results.push(``);
     }
+    return results;
+  }
 
+  private drawRelations(dmmf: DMMF.Document) {
+    const results: string[] = [];
     const manyToManyList = this._findManyToMany(dmmf.datamodel.models);
 
     // add relations
@@ -82,9 +98,8 @@ export class PlantUmlErdGenerator {
         `${model?.name} }o${this.config.lineLength}o{ ${field.type}`,
       );
     }
-    results.push('@enduml');
 
-    await fs.writeFile(this.config.output, results.join('\n'));
+    return results;
   }
 
   private _findManyToMany(models: DMMF.Model[]) {
