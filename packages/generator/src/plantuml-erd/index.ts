@@ -18,15 +18,63 @@ export class PlantUmlErdGenerator {
     }
     const results = ['@startuml example', 'skinparam linetype ortho'];
 
+    results.push(...this.drawEnums(dmmf));
+
     results.push(...this.drawEntities(dmmf));
 
     results.push(...this.drawRelations(dmmf));
+
+    results.push(...this.drawEnumRelations(dmmf));
 
     results.push('@enduml');
 
     await fs.writeFile(this.config.output, results.join('\n'));
   }
 
+  private drawEnumRelations(dmmf: DMMF.Document) {
+    const results: string[] = [];
+    results.push(`' enum relations`);
+    for (const model of dmmf.datamodel.models) {
+      for (const enumRelation of model.fields.filter(
+        (f) => f.kind === 'enum',
+      )) {
+        const lines: string[] = [];
+        lines.push(model.name);
+        lines.push('||');
+        lines.push(this.config.lineLength);
+        lines.push('||');
+        lines.push(enumRelation.type);
+        results.push(lines.join(''));
+      }
+    }
+    return results;
+  }
+
+  private drawEnums(dmmf: DMMF.Document) {
+    const results: string[] = [];
+
+    for (const e of dmmf.datamodel.enums) {
+      const enumDefineline = ['enum "'];
+      enumDefineline.push(e.name);
+      if (e.documentation) {
+        enumDefineline.push(`\\n${e.documentation}`);
+      }
+      enumDefineline.push(`" as ${e.name} {`);
+
+      results.push(enumDefineline.join(''));
+      for (const value of e.values) {
+        const enumValueLine = ['  ', value.name];
+        if (value.dbName) {
+          enumValueLine.push(': ');
+          enumValueLine.push(value.dbName);
+        }
+        results.push(enumValueLine.join(''));
+      }
+      results.push(`}`);
+    }
+
+    return results;
+  }
   private drawEntities(dmmf: DMMF.Document) {
     const results: string[] = [];
     for (const model of dmmf.datamodel.models) {
