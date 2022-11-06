@@ -29,7 +29,7 @@ export class PlantUmlErdGenerator {
           idField?.documentation || ''
         }`,
       );
-      results.push(this.config.lineLength);
+      results.push('--');
       for (const field of model.fields.filter((f) => !f.isId)) {
         const line = this._buildField(field, model.fields);
         if (line) {
