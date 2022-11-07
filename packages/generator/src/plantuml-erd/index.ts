@@ -97,9 +97,11 @@ export class PlantUmlErdGenerator {
 
         const lines: string[] = [];
         lines.push(model.name);
-        lines.push('||');
+        lines.push(' ');
+        lines.push('|o');
         lines.push(this.config.lineLength);
-        lines.push('||');
+        lines.push(enumRelation.isList ? '|{' : '||');
+        lines.push(' ');
         lines.push(enumRelation.type);
         results.push(lines.join(''));
       }
