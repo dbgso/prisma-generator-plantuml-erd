@@ -12,11 +12,63 @@ export class PlantUmlErdGenerator {
     this.config = PlantUmlErdGeneratorConfigsSchema.parse(config);
   }
 
+  /** filtering models and enums */
+  private filter(dmmf: DMMF.Document, targetTableName: string) {
+    if (!targetTableName) return dmmf;
+
+    // target model
+    const target = dmmf.datamodel.models.find(
+      (e) => e.name === targetTableName,
+    );
+    if (!target) return dmmf;
+
+    // enums associated with model
+    const enums = target.fields
+      .filter((f) => f.kind === 'enum')
+      .map((f) => f.type);
+    // models associated with model
+    const models = target.fields
+      .filter((f) => f.kind === 'object')
+      .map((f) => f.type);
+
+    const cloned: DMMF.Document = JSON.parse(JSON.stringify(dmmf));
+
+    // filter to target enums
+    cloned.datamodel.enums = cloned.datamodel.enums.filter((e) =>
+      enums.includes(e.name),
+    );
+    // filter to target models
+    cloned.datamodel.models = cloned.datamodel.models.filter(
+      (e) => models.includes(e.name) || e.name === targetTableName,
+    );
+    return cloned;
+  }
+
   async generate(dmmf: DMMF.Document) {
     if (this.config.debug) {
       await fs.writeFile('/tmp/example.json', JSON.stringify(dmmf, null, 2));
     }
-    const results = ['@startuml example', 'skinparam linetype ortho'];
+    const results = this._generate(dmmf, 'erd');
+    if (this.config.exportPerTables) {
+      results.push(...this.dumpSubRelations(dmmf));
+    }
+
+    await fs.writeFile(this.config.output, results.join('\n'));
+  }
+
+  private dumpSubRelations(dmmf: DMMF.Document) {
+    const results: string[] = [];
+
+    for (const model of dmmf.datamodel.models) {
+      const filteredDmmf = this.filter(dmmf, model.name);
+      results.push(...this._generate(filteredDmmf, model.name));
+    }
+
+    return results;
+  }
+
+  private _generate(dmmf: DMMF.Document, diagramName: string) {
+    const results = [`@startuml ${diagramName}`, 'skinparam linetype ortho'];
 
     results.push(...this.drawEnums(dmmf));
 
@@ -27,8 +79,7 @@ export class PlantUmlErdGenerator {
     results.push(...this.drawEnumRelations(dmmf));
 
     results.push('@enduml');
-
-    await fs.writeFile(this.config.output, results.join('\n'));
+    return results;
   }
 
   private drawEnumRelations(dmmf: DMMF.Document) {
@@ -38,6 +89,12 @@ export class PlantUmlErdGenerator {
       for (const enumRelation of model.fields.filter(
         (f) => f.kind === 'enum',
       )) {
+        // continue when relation target is not exists
+        const isExists = dmmf.datamodel.enums.some(
+          (e) => e.name === enumRelation.type,
+        );
+        if (!isExists) continue;
+
         const lines: string[] = [];
         lines.push(model.name);
         lines.push('||');
@@ -110,6 +167,11 @@ export class PlantUmlErdGenerator {
     results.push(`' Relations`);
     for (const model of dmmf.datamodel.models) {
       for (const field of model.fields) {
+        // continue when relation target is not exists
+        const isExists = dmmf.datamodel.models.some(
+          (model) => model.name === field.type,
+        );
+        if (!isExists) continue;
         const toMany = field.isList;
         const relationName = field.relationName;
         // ignore many to many

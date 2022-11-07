@@ -5,6 +5,7 @@ export const PlantUmlErdGeneratorConfigsSchema = z.object({
   lineLength: z.string().regex(/-+/).optional().default('--'),
   relationMiniumOne: z.boolean().optional().default(false),
   debug: z.boolean().optional().default(false),
+  exportPerTables: z.boolean().optional().default(false),
 });
 export type PlantUmlErdGeneratorConfigsInput = z.input<
   typeof PlantUmlErdGeneratorConfigsSchema
