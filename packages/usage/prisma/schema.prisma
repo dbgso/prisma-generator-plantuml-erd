@@ -1,6 +1,6 @@
 generator custom_generator {
   provider   = "node ../../node_modules/prisma-generator-plantuml-erd"
-  output     = "../types/hogehoge.puml"
+  output     = "./tmp/hogehoge.puml"
   lineLength = "----"
   exportPerTables = true
   usePhysicalTableName = false

@@ -1,5 +1,6 @@
 import { DMMF } from '@prisma/generator-helper';
 import { promises as fs } from 'fs';
+import path from 'path';
 import {
   PlantUmlErdGeneratorConfigs,
   PlantUmlErdGeneratorConfigsInput,
@@ -53,6 +54,9 @@ export class PlantUmlErdGenerator {
       results.push(...this.dumpSubRelations(dmmf));
     }
 
+    fs.mkdir(path.dirname(this.config.output), {
+      recursive: true,
+    });
     await fs.writeFile(this.config.output, results.join('\n'));
   }
 

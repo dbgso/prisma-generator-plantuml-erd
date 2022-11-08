@@ -15,7 +15,10 @@ generatorHandler({
     };
   },
   onGenerate: async (options: GeneratorOptions) => {
-    const generator = new PlantUmlErdGenerator(options.generator.config);
+    const generator = new PlantUmlErdGenerator({
+      output: options.generator.output?.value,
+      ...options.generator.config,
+    });
     await generator.generate(options.dmmf);
   },
 });
