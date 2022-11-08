@@ -1,11 +1,18 @@
 import { z } from 'zod';
+const optionalStrinToBooleanSchema = (flg: boolean) =>
+  z
+    .string()
+    .optional()
+    .default(flg ? 'true' : 'false')
+    .transform((args) => args === 'true');
+
 export const PlantUmlErdGeneratorConfigsSchema = z.object({
   output: z.string().optional().default('./erd.puml'),
-  usePhysicalTableName: z.boolean().optional().default(false),
+  usePhysicalTableName: optionalStrinToBooleanSchema(false),
   lineLength: z.string().regex(/-+/).optional().default('--'),
-  relationMiniumOne: z.boolean().optional().default(false),
-  debug: z.boolean().optional().default(false),
-  exportPerTables: z.boolean().optional().default(false),
+  relationMiniumOne: optionalStrinToBooleanSchema(false),
+  debug: optionalStrinToBooleanSchema(false),
+  exportPerTables: optionalStrinToBooleanSchema(false),
 });
 export type PlantUmlErdGeneratorConfigsInput = z.input<
   typeof PlantUmlErdGeneratorConfigsSchema
