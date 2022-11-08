@@ -13,10 +13,26 @@ generatorHandler({
     };
   },
   onGenerate: async (options: GeneratorOptions) => {
+    console.log(options.generator);
+
+    if (options.generator.output) {
+    }
+
+    const output = getOutput(options);
+    console.log(output);
+
     const generator = new PlantUmlErdGenerator({
-      output: options.generator.output?.value,
+      output: output,
       ...options.generator.config,
     });
     await generator.generate(options.dmmf);
   },
 });
+function getOutput(options: GeneratorOptions) {
+  if (options.generator.output) {
+    if (options.generator.output.fromEnvVar === null) {
+      return options.generator.output.value;
+    }
+  }
+  return undefined;
+}
