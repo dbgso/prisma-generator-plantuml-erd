@@ -1,6 +1,6 @@
 # prisma-generator-plantuml-erd
 
-> This generator was bootstraped using [create-prisma-generator](https://github.com/YassinEldeeb/create-prisma-generator)
+Prisma generator to create an ER Diagram for plantuml.
 
 
 # usage
