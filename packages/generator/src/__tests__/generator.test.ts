@@ -15,7 +15,7 @@ test('enum generation', async () => {
     output: outputfile1,
     // usePhysicalTableName: true,
     lineLength: '--',
-    exportPerTables: true,
+    exportPerTables: 'true',
   });
   await generator.generate(sampleDMMF);
   const pumlfile1 = readFileSync(outputfile1).toString();
@@ -29,7 +29,7 @@ test('enum generation', async () => {
   const outputfile2 = './tmp/example2.puml';
   const generator2 = new PlantUmlErdGenerator({
     output: outputfile2,
-    usePhysicalTableName: true,
+    usePhysicalTableName: 'true',
     lineLength: '---',
   });
   await generator2.generate(sampleDMMF);
@@ -42,7 +42,7 @@ test('enum generation', async () => {
   const generator3 = new PlantUmlErdGenerator({
     output: outputfile3,
     lineLength: '---',
-    debug: false,
+    debug: 'false',
   });
 
   await generator3.generate(

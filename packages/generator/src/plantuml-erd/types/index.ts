@@ -1,7 +1,7 @@
 import { z } from 'zod';
 const optionalStrinToBooleanSchema = (flg: boolean) =>
   z
-    .string()
+    .enum(['true', 'false'])
     .optional()
     .default(flg ? 'true' : 'false')
     .transform((args) => args === 'true');
