@@ -44,13 +44,14 @@
   "homepage": "Link to homepage or github readme here",
   "repository": {
     "type": "git",
-    "url": "Repo link here"
+    "url": "https://github.com/dbgso/prisma-generator-plantuml-erd.git"
   },
-  "author": "Your Name <Your Email>",
+  "author": "osaki.shin <osaki.shin@dbgso.com>",
   "keywords": [
     "prisma",
     "prisma2",
-    "generator"
+    "generator",
+    "plantuml"
   ],
   "release": {
     "branches": [
