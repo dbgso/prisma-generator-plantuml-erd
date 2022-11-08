@@ -139,10 +139,10 @@ export class PlantUmlErdGenerator {
     for (const model of dmmf.datamodel.models) {
       const idField = model.fields.find((f) => f.isId);
       const name = this.config.usePhysicalTableName ? model.dbName : model.name;
-      const documentation = `\\n${
-        model.documentation ? model.documentation : ''
-      }`;
-      results.push(`entity "${name} ${documentation}" as ${model.name} {`);
+      const documentation = model.documentation
+        ? `\\n${model.documentation}`
+        : '';
+      results.push(`entity "${name}${documentation}" as ${model.name} {`);
       results.push(
         `* ${idField?.name} [PK] : ${idField?.type} ${
           idField?.documentation || ''
