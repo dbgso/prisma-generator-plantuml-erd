@@ -1,0 +1,45 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+/// テーブル1
+model Table1 {
+    id String @id @default(uuid())
+
+    table2s    Table2[]
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    Table3     Table3?  @relation(fields: [table3Id], references: [id])
+    table3Id   String?
+
+    @@map("table1")
+}
+
+/// テーブル2
+model Table2 {
+    id String @id @default(uuid())
+
+    table1s Table1[]
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    @@map("table2")
+}
+
+/// テーブル3
+model Table3 {
+    id String @id @default(uuid())
+
+    table1s Table1[]
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    @@map("table3")
+}
