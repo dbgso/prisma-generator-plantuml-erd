@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.0.0...v1.0.1) (2022-11-08)
+
+
+### Bug Fixes
+
+* delete unnecessary code ([457fff9](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/457fff95aff5ef058f36fc5ca32149931e5e9c42))
+* output default value ([62641c3](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/62641c3bcfaea875fea6f47e51a7bdd37536a0d7))
+
 # 1.0.0 (2022-11-08)
 
 
