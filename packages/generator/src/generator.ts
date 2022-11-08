@@ -13,13 +13,7 @@ generatorHandler({
     };
   },
   onGenerate: async (options: GeneratorOptions) => {
-    console.log(options.generator);
-
-    if (options.generator.output) {
-    }
-
     const output = getOutput(options);
-    console.log(output);
 
     const generator = new PlantUmlErdGenerator({
       output: output,
