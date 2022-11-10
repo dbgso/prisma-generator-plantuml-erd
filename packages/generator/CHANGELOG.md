@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.0.3...v1.0.4) (2022-11-10)
+
+
+### Bug Fixes
+
+* repository url ([0f1eb76](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/0f1eb761626656d6750227d3046fb7e2950b234b))
+
 ## [1.0.3](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.0.2...v1.0.3) (2022-11-10)
 
 
