@@ -5,7 +5,7 @@ Prisma generator to create an ER Diagram for plantuml.
 
 You can generate the plantuml source code from the schema.prisma.
 
-![](./usage.png)
+![](https://raw.githubusercontent.com/dbgso/prisma-generator-plantuml-erd/main/packages/generator/usage.png)
 
 # example
 
