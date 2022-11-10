@@ -1,8 +1,8 @@
 generator custom_generator {
-  provider   = "node ../../node_modules/prisma-generator-plantuml-erd"
-  output     = "./tmp/hogehoge.puml"
-  lineLength = "----"
-  exportPerTables = true
+  provider             = "node ../../node_modules/prisma-generator-plantuml-erd"
+  output               = "./example.puml"
+  lineLength           = "----"
+  exportPerTables      = true
   usePhysicalTableName = false
 }
 
@@ -11,10 +11,76 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// ユーザ
 model User {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String?
+
+  languages Language[]
+
+  /// @HideField({ output: false, input: true })
+  created_at DateTime @default(now())
+  /// @HideField({ output: false, input: true })
+  updated_at DateTime @updatedAt()
+
+  /// team
+  team    Team   @relation(fields: [team_id], references: [id])
+  team_id String
+
+  /// company
+  Company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?
+  
+  /// role
+  Role      Role?    @relation(fields: [roleId], references: [id])
+  roleId    String?
+
+  @@map("users")
+}
+
+/// Teams
+model Team {
+  id String @id @default(uuid())
+
+  /// users
+  users User[]
+
+  companies Company[]
+
+  /// @HideField({ output: false, input: true })
+  created_at DateTime @default(now())
+  /// @HideField({ output: false, input: true })
+  updated_at DateTime @updatedAt()
+
+  @@map("teams")
+}
+
+/// 会社
+model Company {
+  id String @id @default(uuid())
+
+  teams Team[]
+  users User[]
+
+  state State
+
+  /// @HideField({ output: false, input: true })
+  created_at DateTime @default(now())
+  /// @HideField({ output: false, input: true })
+  updated_at DateTime @updatedAt()
+
+  @@map("companies")
+}
+
+model Role {
+  id String @id @default(uuid())
+
+  name String
+
+  users User[]
+
+  @@map("roles")
 }
 
 enum NotificationType {
@@ -34,4 +100,10 @@ enum Language {
   Go
   Python
   Cpp
+}
+
+enum State {
+  Active
+  Pending
+  Banned
 }
