@@ -148,7 +148,7 @@ export class PlantUmlErdGenerator {
         : '';
       results.push(`entity "${name}${documentation}" as ${model.name} {`);
       results.push(
-        `* ${idField?.name} [PK] : ${idField?.type} ${
+        `+ ${idField?.name} [PK] : ${idField?.type} ${
           idField?.documentation || ''
         }`,
       );
@@ -291,16 +291,22 @@ export class PlantUmlErdGenerator {
       result.push(field.type);
     }
 
-    return result.join(' ');
+    const text = result.join(' ');
+    if (foreignKey) {
+      // foreign key
+      return `# ${text}`;
+    } else if (field.isRequired) {
+      // required field
+      return `* ${text}`;
+    }
+
+    return text;
   }
 
   private _buildField(field: DMMF.Field, fields: DMMF.Field[]) {
     if (field.relationName) return undefined;
 
     const name = this._buildFieldDocument(field, fields);
-
-    // Required Field
-    if (field.isRequired) return `**${name}**`;
 
     return name;
   }
