@@ -5,6 +5,7 @@ generator custom_generator {
   exportPerTables      = true
   usePhysicalTableName = false
   markdownOutput       = "./example-tables.md"
+  markdownDrawERD      = true
 }
 
 datasource db {
@@ -32,10 +33,10 @@ model User {
   /// company
   Company   Company? @relation(fields: [companyId], references: [id])
   companyId String?
-  
+
   /// role
-  Role      Role?    @relation(fields: [roleId], references: [id])
-  roleId    String?
+  Role   Role?   @relation(fields: [roleId], references: [id])
+  roleId String?
 
   @@map("users")
 }

@@ -27,20 +27,24 @@ test('enum generation', async () => {
   expect(pumlfile1.includes(`entity "User`)).toBeTruthy();
   expect(pumlfile1.match(/@startuml/g)?.length).toBeGreaterThan(1); // export per table
   expect(pumlfile1.match(/undefined/g)?.length).toBeUndefined();
-  expect(readFileSync('./tmp/example1.md').toString().length).toBeGreaterThan(
-    0,
-  );
+  const markdown1 = readFileSync('./tmp/example1.md').toString();
+  expect(markdown1.length).toBeGreaterThan(0);
   const outputfile2 = './tmp/example2.puml';
   const generator2 = new PlantUmlErdGenerator({
     output: outputfile2,
     usePhysicalTableName: 'true',
     lineLength: '---',
+    markdownOutput: './tmp/example2.md',
+    markdownDrawERD: 'true',
   });
   await generator2.generate(sampleDMMF);
   const pumlfile2 = readFileSync(outputfile2).toString();
   expect(pumlfile2.includes('User |o---|{ Language')).toBeTruthy(); // `---`line
   expect(pumlfile2.includes(`entity "users`)).toBeTruthy(); // physical table name
   expect(pumlfile2.match(/@startuml/g)?.length).toBe(1); // export one puml
+  const markdown2 = readFileSync('./tmp/example2.md').toString();
+  expect(markdown2.length).toBeGreaterThan(0);
+  expect(markdown2.match(/```plantuml/g)?.length).toBe(7);
 
   const outputfile3 = './tmp/example3.puml';
   const generator3 = new PlantUmlErdGenerator({
