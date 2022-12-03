@@ -16,6 +16,7 @@ test('enum generation', async () => {
     // usePhysicalTableName: true,
     lineLength: '--',
     exportPerTables: 'true',
+    markdownOutput: './tmp/example1.md',
   });
   await generator.generate(sampleDMMF);
   const pumlfile1 = readFileSync(outputfile1).toString();
@@ -26,7 +27,9 @@ test('enum generation', async () => {
   expect(pumlfile1.includes(`entity "User`)).toBeTruthy();
   expect(pumlfile1.match(/@startuml/g)?.length).toBeGreaterThan(1); // export per table
   expect(pumlfile1.match(/undefined/g)?.length).toBeUndefined();
-
+  expect(readFileSync('./tmp/example1.md').toString().length).toBeGreaterThan(
+    0,
+  );
   const outputfile2 = './tmp/example2.puml';
   const generator2 = new PlantUmlErdGenerator({
     output: outputfile2,
