@@ -5,7 +5,7 @@ generator custom_generator {
   exportPerTables      = true
   usePhysicalTableName = false
   markdownOutput       = "./example-tables.md"
-  markdownDrawERD      = true
+  markdownIncludeERD      = true
 }
 
 datasource db {
