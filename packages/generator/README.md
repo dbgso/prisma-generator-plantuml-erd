@@ -109,10 +109,10 @@ The example config is here.
 
 ```prisma
 generator erd_plantuml {
-  output: "path/to/output.puml",
-  usePhysicalTableName: true,
-  lineLength: "---"
-  exportPerTables: true
+  output               = "path/to/output.puml"
+  lineLength           = "----"
+  exportPerTables      = true
+  usePhysicalTableName = false
 }
 ```
 
