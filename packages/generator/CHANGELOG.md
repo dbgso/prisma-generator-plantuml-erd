@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.0.4...v1.1.0) (2022-12-03)
+
+
+### Bug Fixes
+
+* for no primary key table ([fa05157](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/fa05157188c3638f608e98ce837185e71ab6cb3f))
+
+
+### Features
+
+* option to create table definition markdown ([06a6447](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/06a6447d52b19f9b1b4010697c03da6d695df9c2))
+
 ## [1.0.4](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.0.3...v1.0.4) (2022-11-10)
 
 
