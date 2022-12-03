@@ -25,6 +25,7 @@ test('enum generation', async () => {
   expect(pumlfile1.includes('ユーザ" as User')).toBeTruthy();
   expect(pumlfile1.includes(`entity "User`)).toBeTruthy();
   expect(pumlfile1.match(/@startuml/g)?.length).toBeGreaterThan(1); // export per table
+  expect(pumlfile1.match(/undefined/g)?.length).toBeUndefined();
 
   const outputfile2 = './tmp/example2.puml';
   const generator2 = new PlantUmlErdGenerator({

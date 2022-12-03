@@ -147,11 +147,15 @@ export class PlantUmlErdGenerator {
         ? `\\n${model.documentation}`
         : '';
       results.push(`entity "${name}${documentation}" as ${model.name} {`);
-      results.push(
-        `+ ${idField?.name} [PK] : ${idField?.type} ${
-          idField?.documentation || ''
-        }`,
-      );
+      // is PK exists?
+      const idField = model.fields.find((f) => f.isId);
+      if (idField?.name) {
+        results.push(
+          `+ ${idField?.name} [PK] : ${idField?.type} ${
+            idField?.documentation || ''
+          }`,
+        );
+      }
       results.push('--');
       for (const field of model.fields.filter((f) => !f.isId)) {
         const line = this._buildField(field, model.fields);

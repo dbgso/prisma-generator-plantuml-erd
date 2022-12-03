@@ -57,6 +57,42 @@ model Company {
   @@map("companies")
 }
 
+/// foo
+model Foo {
+  id String @id @default(uuid())
+
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+  RelationTable RelationTable[]
+
+  @@map("foos")
+}
+
+/// bar
+model Bar {
+  id String @id @default(uuid())
+
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+  RelationTable RelationTable[]
+
+  @@map("bars")
+}
+
+/// 関係テーブル
+model RelationTable {
+  foo    Foo    @relation(fields: [foo_id], references: [id])
+  foo_id String
+  bar    Bar    @relation(fields: [bar_id], references: [id])
+  bar_id String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@id([foo_id, bar_id])
+  @@map("relation_tables")
+}
+
 enum NotificationType {
   newPosts
   newComments
