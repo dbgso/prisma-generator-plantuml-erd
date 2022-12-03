@@ -4,6 +4,7 @@ generator custom_generator {
   lineLength           = "----"
   exportPerTables      = true
   usePhysicalTableName = false
+  markdownOutput       = "./example-tables.md"
 }
 
 datasource db {

@@ -1,6 +1,7 @@
 import { DMMF } from '@prisma/generator-helper';
-import { promises as fs } from 'fs';
+import { promises as fs, writeFileSync } from 'fs';
 import path from 'path';
+import { z } from 'zod';
 import {
   PlantUmlErdGeneratorConfigs,
   PlantUmlErdGeneratorConfigsInput,
@@ -58,6 +59,10 @@ export class PlantUmlErdGenerator {
       recursive: true,
     });
     await fs.writeFile(this.config.output, results.join('\n'));
+    if (this.config.markdownOutput) {
+      const markdown = await this.dumpMarkdownTable(dmmf);
+      writeFileSync(this.config.markdownOutput, markdown.join('\n'));
+    }
   }
 
   private dumpSubRelations(dmmf: DMMF.Document) {
@@ -83,6 +88,114 @@ export class PlantUmlErdGenerator {
     results.push(...this.drawEnumRelations(dmmf));
 
     results.push('@enduml');
+    return results;
+  }
+
+  private _tableName(model: DMMF.Model) {
+    if (this.config.usePhysicalTableName) return model.dbName || '';
+    return model.name;
+  }
+
+  private _getDefault(field: DMMF.Field) {
+    const defaultValue = field.default;
+    if (!defaultValue) return '';
+    const validatedDefaultValue = z
+      .object({ name: z.string() })
+      .safeParse(defaultValue);
+    if (validatedDefaultValue.success) {
+      return validatedDefaultValue.data.name;
+    }
+    return defaultValue;
+  }
+
+  private toLink(name?: string) {
+    if (!name) return '';
+    return `[${name}](#${name.toLowerCase()})`;
+  }
+
+  private findParentField(
+    models: DMMF.Model[],
+    baseModelName: string,
+    relationToField: string,
+  ) {
+    const results: string[] = [];
+    for (const model of models) {
+      const foundField = model.fields
+        .filter((e) => e.relationToFields?.length)
+        .find((f) => f.type === baseModelName);
+      if (foundField?.relationToFields?.includes(relationToField)) {
+        results.push(this._tableName(model) || '');
+      }
+    }
+    return results;
+  }
+
+  private findChildrenModel() {}
+
+  private dumpMarkdownTable(dmmf: DMMF.Document) {
+    const results: string[] = [];
+    results.push(`# Tables`);
+    for (const model of dmmf.datamodel.models) {
+      const name = this._tableName(model);
+      results.push(`- ${this.toLink(name)}`);
+      if (model.documentation) {
+        results.push(`  - ${model.documentation}`);
+      }
+    }
+    results.push('');
+
+    for (const model of dmmf.datamodel.models) {
+      results.push(`# ${this._tableName(model)}`);
+
+      results.push('## Description');
+      results.push(model.documentation || '');
+
+      results.push(`## Columns`);
+
+      const columns = [
+        'Name',
+        'Type',
+        'Default',
+        'Nullable',
+        'Children',
+        'Parent',
+        'Comment',
+      ];
+      results.push('|' + columns.join(' | ') + '|');
+      results.push('|' + columns.map(() => '---').join(' | ') + '|');
+      for (const field of model.fields) {
+        if (field.relationName) continue;
+
+        const relation = this.findParentField(
+          dmmf.datamodel.models,
+          model.name,
+          field.name,
+        );
+
+        const fromField = model.fields.find((e) =>
+          e.relationFromFields?.includes(field.name),
+        );
+        let m: DMMF.Model | undefined = undefined;
+        if (fromField) {
+          const model = dmmf.datamodel.models.find(
+            (e) => e.name === fromField.type,
+          );
+          if (model) m = model;
+        }
+
+        const column: string[] = [
+          field.name,
+          field.type,
+          this._getDefault(field) + '',
+          !field.isRequired + '',
+          relation.map((r) => this.toLink(r)).join(', '),
+          m ? this.toLink(this._tableName(m) || '') : '',
+          field.documentation || '',
+        ];
+
+        results.push('|' + column.join(' | ') + '|');
+      }
+    }
     return results;
   }
 
@@ -141,17 +254,20 @@ export class PlantUmlErdGenerator {
   private drawEntities(dmmf: DMMF.Document) {
     const results: string[] = [];
     for (const model of dmmf.datamodel.models) {
-      const idField = model.fields.find((f) => f.isId);
       const name = this.config.usePhysicalTableName ? model.dbName : model.name;
       const documentation = model.documentation
         ? `\\n${model.documentation}`
         : '';
       results.push(`entity "${name}${documentation}" as ${model.name} {`);
-      results.push(
-        `+ ${idField?.name} [PK] : ${idField?.type} ${
-          idField?.documentation || ''
-        }`,
-      );
+      // is PK exists?
+      const idField = model.fields.find((f) => f.isId);
+      if (idField?.name) {
+        results.push(
+          `+ ${idField?.name} [PK] : ${idField?.type} ${
+            idField?.documentation || ''
+          }`,
+        );
+      }
       results.push('--');
       for (const field of model.fields.filter((f) => !f.isId)) {
         const line = this._buildField(field, model.fields);

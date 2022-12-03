@@ -13,6 +13,7 @@ export const PlantUmlErdGeneratorConfigsSchema = z.object({
   relationMiniumOne: optionalStrinToBooleanSchema(false),
   debug: optionalStrinToBooleanSchema(false),
   exportPerTables: optionalStrinToBooleanSchema(false),
+  markdownOutput: z.string().optional(),
 });
 export type PlantUmlErdGeneratorConfigsInput = z.input<
   typeof PlantUmlErdGeneratorConfigsSchema
