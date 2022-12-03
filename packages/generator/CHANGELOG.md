@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.1.0...v1.2.0) (2022-12-03)
+
+
+### Features
+
+* create markdown with erd ([682c713](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/682c7138adb671fc16cb39e35eb780354aeb563a))
+
 # [1.1.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.0.4...v1.1.0) (2022-12-03)
 
 
