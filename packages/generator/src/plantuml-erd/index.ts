@@ -143,7 +143,7 @@ export class PlantUmlErdGenerator {
     }
     results.push('');
 
-    if (this.config.markdownDrawERD) {
+    if (this.config.markdownIncludeERD) {
       const erd = this._generate(dmmf, 'erd');
       results.push('# ER diagram');
       results.push('```plantuml');
@@ -203,7 +203,7 @@ export class PlantUmlErdGenerator {
         results.push('|' + column.join(' | ') + '|');
       }
       // draw er diagram
-      if (this.config.markdownDrawERD) {
+      if (this.config.markdownIncludeERD) {
         results.push('');
         results.push('## ER diagram');
 

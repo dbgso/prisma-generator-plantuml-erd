@@ -35,7 +35,7 @@ test('enum generation', async () => {
     usePhysicalTableName: 'true',
     lineLength: '---',
     markdownOutput: './tmp/example2.md',
-    markdownDrawERD: 'true',
+    markdownIncludeERD: 'true',
   });
   await generator2.generate(sampleDMMF);
   const pumlfile2 = readFileSync(outputfile2).toString();
