@@ -1,5 +1,5 @@
 import { DMMF } from '@prisma/generator-helper';
-import { promises as fs, writeFileSync } from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
 import { z } from 'zod';
 import {
@@ -61,7 +61,7 @@ export class PlantUmlErdGenerator {
     await fs.writeFile(this.config.output, results.join('\n'));
     if (this.config.markdownOutput) {
       const markdown = await this.dumpMarkdownTable(dmmf);
-      writeFileSync(this.config.markdownOutput, markdown.join('\n'));
+      await fs.writeFile(this.config.markdownOutput, markdown.join('\n'));
     }
   }
 
@@ -70,7 +70,8 @@ export class PlantUmlErdGenerator {
 
     for (const model of dmmf.datamodel.models) {
       const filteredDmmf = this.filter(dmmf, model.name);
-      results.push(...this._generate(filteredDmmf, model.name));
+      const subPumlString = this._generate(filteredDmmf, model.name);
+      results.push(...subPumlString);
     }
 
     return results;
@@ -130,8 +131,6 @@ export class PlantUmlErdGenerator {
     return results;
   }
 
-  private findChildrenModel() {}
-
   private dumpMarkdownTable(dmmf: DMMF.Document) {
     const results: string[] = [];
     results.push(`# Tables`);
@@ -143,6 +142,14 @@ export class PlantUmlErdGenerator {
       }
     }
     results.push('');
+
+    if (this.config.markdownDrawERD) {
+      const erd = this._generate(dmmf, 'erd');
+      results.push('# ER diagram');
+      results.push('```plantuml');
+      results.push(...erd);
+      results.push('```');
+    }
 
     for (const model of dmmf.datamodel.models) {
       results.push(`# ${this._tableName(model)}`);
@@ -194,6 +201,17 @@ export class PlantUmlErdGenerator {
         ];
 
         results.push('|' + column.join(' | ') + '|');
+      }
+      // draw er diagram
+      if (this.config.markdownDrawERD) {
+        results.push('');
+        results.push('## ER diagram');
+
+        const filteredDmmf = this.filter(dmmf, model.name);
+        const subPumlString = this._generate(filteredDmmf, model.name);
+        results.push('```plantuml');
+        results.push(...subPumlString);
+        results.push('```');
       }
     }
     return results;
