@@ -85,17 +85,17 @@ Company |o----|| State
 
 ## Columns
 
-|Name | Type | Default | Nullable | Children | Parent | Comment | Unique|
+|Name | Type | Default | Nullable | Unique | Children | Parent | Comment|
 |--- | --- | --- | --- | --- | --- | --- | ---|
-|id | Int | autoincrement | false |  |  |  | true|
-|email | String |  | false |  |  |  | true|
-|name | String |  | true |  |  |  | false|
-|languages | Language |  | false |  |  |  | false|
-|created_at | DateTime | now | false |  |  | @HideField({ output: false, input: true }) | false|
-|updated_at | DateTime |  | false |  |  | @HideField({ output: false, input: true }) | false|
-|team_id | String |  | false |  | [Team](#team) |  | false|
-|companyId | String |  | true |  | [Company](#company) |  | false|
-|roleId | String |  | true |  | [Role](#role) |  | false|
+|id | Int | autoincrement | false | true |  |  | |
+|email | String |  | false | true |  |  | |
+|name | String |  | true | false |  |  | |
+|languages | Language |  | false | false |  |  | |
+|created_at | DateTime | now | false | false |  |  | @HideField({ output: false, input: true })|
+|updated_at | DateTime |  | false | false |  |  | @HideField({ output: false, input: true })|
+|team_id | String |  | false | false |  | [Team](#team) | |
+|companyId | String |  | true | false |  | [Company](#company) | |
+|roleId | String |  | true | false |  | [Role](#role) | |
 
 # Indexes
 
@@ -167,11 +167,11 @@ Teams
 
 ## Columns
 
-|Name | Type | Default | Nullable | Children | Parent | Comment | Unique|
+|Name | Type | Default | Nullable | Unique | Children | Parent | Comment|
 |--- | --- | --- | --- | --- | --- | --- | ---|
-|id | String | uuid | false | [User](#user), [Company](#company) |  |  | true|
-|created_at | DateTime | now | false |  |  | @HideField({ output: false, input: true }) | false|
-|updated_at | DateTime |  | false |  |  | @HideField({ output: false, input: true }) | false|
+|id | String | uuid | false | true | [User](#user), [Company](#company) |  | |
+|created_at | DateTime | now | false | false |  |  | @HideField({ output: false, input: true })|
+|updated_at | DateTime |  | false | false |  |  | @HideField({ output: false, input: true })|
 
 ## ER diagram
 
@@ -221,12 +221,12 @@ Team }o----o{ Company
 
 ## Columns
 
-|Name | Type | Default | Nullable | Children | Parent | Comment | Unique|
+|Name | Type | Default | Nullable | Unique | Children | Parent | Comment|
 |--- | --- | --- | --- | --- | --- | --- | ---|
-|id | String | uuid | false | [User](#user), [Team](#team) |  |  | true|
-|state | State |  | false |  |  |  | false|
-|created_at | DateTime | now | false |  |  | @HideField({ output: false, input: true }) | false|
-|updated_at | DateTime |  | false |  |  | @HideField({ output: false, input: true }) | false|
+|id | String | uuid | false | true | [User](#user), [Team](#team) |  | |
+|state | State |  | false | false |  |  | |
+|created_at | DateTime | now | false | false |  |  | @HideField({ output: false, input: true })|
+|updated_at | DateTime |  | false | false |  |  | @HideField({ output: false, input: true })|
 
 ## ER diagram
 
@@ -282,10 +282,10 @@ Company |o----|| State
 
 ## Columns
 
-|Name | Type | Default | Nullable | Children | Parent | Comment | Unique|
+|Name | Type | Default | Nullable | Unique | Children | Parent | Comment|
 |--- | --- | --- | --- | --- | --- | --- | ---|
-|id | String | uuid | false | [User](#user) |  |  | true|
-|name | String |  | false |  |  |  | false|
+|id | String | uuid | false | true | [User](#user) |  | |
+|name | String |  | false | false |  |  | |
 
 ## ER diagram
 

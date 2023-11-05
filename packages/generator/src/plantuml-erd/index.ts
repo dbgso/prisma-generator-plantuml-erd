@@ -167,10 +167,10 @@ export class PlantUmlErdGenerator {
         'Type',
         'Default',
         'Nullable',
+        'Unique',
         'Children',
         'Parent',
         'Comment',
-        'Unique',
       ];
       const rows = model.fields
         .filter((field) => !field.relationName) //
@@ -197,10 +197,10 @@ export class PlantUmlErdGenerator {
             field.type,
             this._getDefault(field) + '',
             !field.isRequired + '',
+            (field.isUnique || field.isId) + '' || '',
             relation.map((r) => this.toLink(r)).join(', '),
             m ? this.toLink(this._tableName(m) || '') : '',
             field.documentation || '',
-            (field.isUnique || field.isId) + '' || '',
           ];
           return column;
         });
