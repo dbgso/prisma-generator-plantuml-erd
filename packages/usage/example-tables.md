@@ -97,6 +97,12 @@ Company |o----|| State
 |companyId | String |  | true |  | [Company](#company) |  | false|
 |roleId | String |  | true |  | [Role](#role) |  | false|
 
+# Indexes
+
+|columns | index type | index name|
+|--- | --- | ---|
+|team_id,companyId | unique | |
+
 ## ER diagram
 
 ```plantuml

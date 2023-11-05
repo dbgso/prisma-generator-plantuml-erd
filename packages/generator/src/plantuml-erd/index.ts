@@ -172,41 +172,58 @@ export class PlantUmlErdGenerator {
         'Comment',
         'Unique',
       ];
-      results.push('|' + columns.join(' | ') + '|');
-      results.push('|' + columns.map(() => '---').join(' | ') + '|');
-      for (const field of model.fields) {
-        if (field.relationName) continue;
-
-        const relation = this.findParentField(
-          dmmf.datamodel.models,
-          model.name,
-          field.name,
-        );
-
-        const fromField = model.fields.find((e) =>
-          e.relationFromFields?.includes(field.name),
-        );
-        let m: DMMF.Model | undefined = undefined;
-        if (fromField) {
-          const model = dmmf.datamodel.models.find(
-            (e) => e.name === fromField.type,
+      const rows = model.fields
+        .filter((field) => !field.relationName) //
+        .map((field) => {
+          const relation = this.findParentField(
+            dmmf.datamodel.models,
+            model.name,
+            field.name,
           );
-          if (model) m = model;
+
+          const fromField = model.fields.find((e) =>
+            e.relationFromFields?.includes(field.name),
+          );
+          let m: DMMF.Model | undefined = undefined;
+          if (fromField) {
+            const model = dmmf.datamodel.models.find(
+              (e) => e.name === fromField.type,
+            );
+            if (model) m = model;
+          }
+
+          const column: string[] = [
+            field.name,
+            field.type,
+            this._getDefault(field) + '',
+            !field.isRequired + '',
+            relation.map((r) => this.toLink(r)).join(', '),
+            m ? this.toLink(this._tableName(m) || '') : '',
+            field.documentation || '',
+            (field.isUnique || field.isId) + '' || '',
+          ];
+          return column;
+        });
+      results.push(...this.buildMarkdownTable(columns, rows));
+
+      if (model.uniqueIndexes.length > 0) {
+        results.push('');
+        results.push('# Indexes');
+        results.push('');
+
+        const indexes = this.buildMarkdownTable(
+          ['columns', 'index type', 'index name'],
+          model.uniqueIndexes.map((index) => [
+            index.fields.join(','),
+            'unique',
+            index.name || '',
+          ]),
+        );
+        if (model.uniqueIndexes.length > 0) {
+          results.push(...indexes);
         }
-
-        const column: string[] = [
-          field.name,
-          field.type,
-          this._getDefault(field) + '',
-          !field.isRequired + '',
-          relation.map((r) => this.toLink(r)).join(', '),
-          m ? this.toLink(this._tableName(m) || '') : '',
-          field.documentation || '',
-          (field.isUnique || field.isId) + '' || '',
-        ];
-
-        results.push('|' + column.join(' | ') + '|');
       }
+
       // draw er diagram
       if (this.config.markdownIncludeERD) {
         results.push('');
@@ -218,6 +235,17 @@ export class PlantUmlErdGenerator {
         results.push(...subPumlString);
         results.push('```');
       }
+    }
+    return results;
+  }
+
+  private buildMarkdownTable(columns: string[], rows: string[][]) {
+    const results: string[] = [];
+    results.push('|' + columns.join(' | ') + '|');
+    results.push('|' + columns.map(() => '---').join(' | ') + '|');
+
+    for (const column of rows) {
+      results.push('|' + column.join(' | ') + '|');
     }
     return results;
   }

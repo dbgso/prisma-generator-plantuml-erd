@@ -39,6 +39,8 @@ model User {
   Role   Role?   @relation(fields: [roleId], references: [id])
   roleId String?
 
+  @@unique([team_id, companyId])
+
   @@map("users")
 }
 
