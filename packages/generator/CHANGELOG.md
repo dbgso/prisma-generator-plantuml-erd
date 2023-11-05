@@ -1,3 +1,16 @@
+# [1.3.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.2.1...v1.3.0) (2023-11-05)
+
+
+### Bug Fixes
+
+* markdown syntax error ([c408b77](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/c408b77182bbffd1f43ba75aa35978d5181f564b))
+
+
+### Features
+
+* add index info table on markdown ([e459293](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/e459293a0d47944ff70df9a247ffb82580da37b9))
+* add unique column information ([5578602](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/5578602ae8dc07f955383a89da1fbad1b515072e))
+
 ## [1.2.1](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.2.0...v1.2.1) (2022-12-03)
 
 

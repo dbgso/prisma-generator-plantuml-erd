@@ -1,7 +1,7 @@
 {
   "name": "prisma-generator-plantuml-erd",
   "description": "Provide a description about your generator",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "main": "dist/generator.js",
   "license": "MIT",
   "bin": {
