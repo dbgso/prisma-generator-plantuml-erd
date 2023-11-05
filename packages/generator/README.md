@@ -103,6 +103,23 @@ if you set this flag to '---'
 Table1 }o---o| Table3
 ```
 
+# showUniqueKeyLabel
+
+If this flag is true, unique column is also labeled as unique key on er diagram, like `[UK]`.
+The default value is false.
+
+# markdownOutput
+
+If this flag is set, a markdown table definition will be generated as well.
+
+example
+- https://raw.githubusercontent.com/dbgso/prisma-generator-plantuml-erd/main/packages/usage/example-tables.md
+
+# markdownIncludeERD
+
+If this flag is true, an ER diagram for each table is generated on the table definitions
+The default value is false.
+
 ## Example
 
 The example config is here.
@@ -113,6 +130,9 @@ generator erd_plantuml {
   lineLength           = "----"
   exportPerTables      = true
   usePhysicalTableName = false
+  showUniqueKeyLabel = true
+  markdownOutput       = "./example-tables.md"
+  markdownIncludeERD      = true
 }
 ```
 

@@ -36,7 +36,7 @@ enum "State" as State {
 entity "User\nユーザ" as User {
 + id [PK] : Int 
 --
-  * email : String
+  * email : [UK] String
   name : String
   * languages : Language
   * created_at : DateTime
@@ -79,22 +79,32 @@ Company |o----|| State
 @enduml
 ```
 # User
+
 ## Description
 ユーザ
+
 ## Columns
-|Name | Type | Default | Nullable | Children | Parent | Comment|
-|--- | --- | --- | --- | --- | --- | ---|
-|id | Int | autoincrement | false |  |  | |
-|email | String |  | false |  |  | |
-|name | String |  | true |  |  | |
-|languages | Language |  | false |  |  | |
-|created_at | DateTime | now | false |  |  | @HideField({ output: false, input: true })|
-|updated_at | DateTime |  | false |  |  | @HideField({ output: false, input: true })|
-|team_id | String |  | false |  | [Team](#team) | |
-|companyId | String |  | true |  | [Company](#company) | |
-|roleId | String |  | true |  | [Role](#role) | |
+
+|Name | Type | Default | Nullable | Children | Parent | Comment | Unique|
+|--- | --- | --- | --- | --- | --- | --- | ---|
+|id | Int | autoincrement | false |  |  |  | true|
+|email | String |  | false |  |  |  | true|
+|name | String |  | true |  |  |  | false|
+|languages | Language |  | false |  |  |  | false|
+|created_at | DateTime | now | false |  |  | @HideField({ output: false, input: true }) | false|
+|updated_at | DateTime |  | false |  |  | @HideField({ output: false, input: true }) | false|
+|team_id | String |  | false |  | [Team](#team) |  | false|
+|companyId | String |  | true |  | [Company](#company) |  | false|
+|roleId | String |  | true |  | [Role](#role) |  | false|
+
+# Indexes
+
+|columns | index type | index name|
+|--- | --- | ---|
+|team_id,companyId | unique | |
 
 ## ER diagram
+
 ```plantuml
 @startuml User
 skinparam linetype ortho
@@ -109,7 +119,7 @@ enum "Language" as Language {
 entity "User\nユーザ" as User {
 + id [PK] : Int 
 --
-  * email : String
+  * email : [UK] String
   name : String
   * languages : Language
   * created_at : DateTime
@@ -151,23 +161,27 @@ User |o----|{ Language
 @enduml
 ```
 # Team
+
 ## Description
 Teams
+
 ## Columns
-|Name | Type | Default | Nullable | Children | Parent | Comment|
-|--- | --- | --- | --- | --- | --- | ---|
-|id | String | uuid | false | [User](#user), [Company](#company) |  | |
-|created_at | DateTime | now | false |  |  | @HideField({ output: false, input: true })|
-|updated_at | DateTime |  | false |  |  | @HideField({ output: false, input: true })|
+
+|Name | Type | Default | Nullable | Children | Parent | Comment | Unique|
+|--- | --- | --- | --- | --- | --- | --- | ---|
+|id | String | uuid | false | [User](#user), [Company](#company) |  |  | true|
+|created_at | DateTime | now | false |  |  | @HideField({ output: false, input: true }) | false|
+|updated_at | DateTime |  | false |  |  | @HideField({ output: false, input: true }) | false|
 
 ## ER diagram
+
 ```plantuml
 @startuml Team
 skinparam linetype ortho
 entity "User\nユーザ" as User {
 + id [PK] : Int 
 --
-  * email : String
+  * email : [UK] String
   name : String
   * languages : Language
   * created_at : DateTime
@@ -201,17 +215,21 @@ Team }o----o{ Company
 @enduml
 ```
 # Company
+
 ## Description
 会社
+
 ## Columns
-|Name | Type | Default | Nullable | Children | Parent | Comment|
-|--- | --- | --- | --- | --- | --- | ---|
-|id | String | uuid | false | [User](#user), [Team](#team) |  | |
-|state | State |  | false |  |  | |
-|created_at | DateTime | now | false |  |  | @HideField({ output: false, input: true })|
-|updated_at | DateTime |  | false |  |  | @HideField({ output: false, input: true })|
+
+|Name | Type | Default | Nullable | Children | Parent | Comment | Unique|
+|--- | --- | --- | --- | --- | --- | --- | ---|
+|id | String | uuid | false | [User](#user), [Team](#team) |  |  | true|
+|state | State |  | false |  |  |  | false|
+|created_at | DateTime | now | false |  |  | @HideField({ output: false, input: true }) | false|
+|updated_at | DateTime |  | false |  |  | @HideField({ output: false, input: true }) | false|
 
 ## ER diagram
+
 ```plantuml
 @startuml Company
 skinparam linetype ortho
@@ -223,7 +241,7 @@ enum "State" as State {
 entity "User\nユーザ" as User {
 + id [PK] : Int 
 --
-  * email : String
+  * email : [UK] String
   name : String
   * languages : Language
   * created_at : DateTime
@@ -258,22 +276,26 @@ Company |o----|| State
 @enduml
 ```
 # Role
+
 ## Description
 
+
 ## Columns
-|Name | Type | Default | Nullable | Children | Parent | Comment|
-|--- | --- | --- | --- | --- | --- | ---|
-|id | String | uuid | false | [User](#user) |  | |
-|name | String |  | false |  |  | |
+
+|Name | Type | Default | Nullable | Children | Parent | Comment | Unique|
+|--- | --- | --- | --- | --- | --- | --- | ---|
+|id | String | uuid | false | [User](#user) |  |  | true|
+|name | String |  | false |  |  |  | false|
 
 ## ER diagram
+
 ```plantuml
 @startuml Role
 skinparam linetype ortho
 entity "User\nユーザ" as User {
 + id [PK] : Int 
 --
-  * email : String
+  * email : [UK] String
   name : String
   * languages : Language
   * created_at : DateTime

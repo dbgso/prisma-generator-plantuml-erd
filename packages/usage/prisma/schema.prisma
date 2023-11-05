@@ -6,6 +6,7 @@ generator custom_generator {
   usePhysicalTableName = false
   markdownOutput       = "./example-tables.md"
   markdownIncludeERD      = true
+  showUniqueKeyLabel = true
 }
 
 datasource db {
@@ -37,6 +38,8 @@ model User {
   /// role
   Role   Role?   @relation(fields: [roleId], references: [id])
   roleId String?
+
+  @@unique([team_id, companyId])
 
   @@map("users")
 }
