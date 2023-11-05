@@ -25,7 +25,7 @@ enum "State" as State {
 entity "User\nユーザ" as User {
 + id [PK] : Int 
 --
-  * email : String
+  * email : [UK] String
   name : String
   * languages : Language
   * created_at : DateTime
@@ -79,7 +79,7 @@ enum "Language" as Language {
 entity "User\nユーザ" as User {
 + id [PK] : Int 
 --
-  * email : String
+  * email : [UK] String
   name : String
   * languages : Language
   * created_at : DateTime
@@ -124,7 +124,7 @@ skinparam linetype ortho
 entity "User\nユーザ" as User {
 + id [PK] : Int 
 --
-  * email : String
+  * email : [UK] String
   name : String
   * languages : Language
   * created_at : DateTime
@@ -166,7 +166,7 @@ enum "State" as State {
 entity "User\nユーザ" as User {
 + id [PK] : Int 
 --
-  * email : String
+  * email : [UK] String
   name : String
   * languages : Language
   * created_at : DateTime
@@ -204,7 +204,7 @@ skinparam linetype ortho
 entity "User\nユーザ" as User {
 + id [PK] : Int 
 --
-  * email : String
+  * email : [UK] String
   name : String
   * languages : Language
   * created_at : DateTime

@@ -170,6 +170,7 @@ export class PlantUmlErdGenerator {
         'Children',
         'Parent',
         'Comment',
+        'Unique',
       ];
       results.push('|' + columns.join(' | ') + '|');
       results.push('|' + columns.map(() => '---').join(' | ') + '|');
@@ -201,6 +202,7 @@ export class PlantUmlErdGenerator {
           relation.map((r) => this.toLink(r)).join(', '),
           m ? this.toLink(this._tableName(m) || '') : '',
           field.documentation || '',
+          (field.isUnique || field.isId) + '' || '',
         ];
 
         results.push('|' + column.join(' | ') + '|');
@@ -421,13 +423,17 @@ export class PlantUmlErdGenerator {
     const foreignKey = fields.find((f) =>
       f.relationFromFields?.includes(field.name),
     );
+    if (this.config.showUniqueKeyLabel) {
+      if (field.isUnique) {
+        result.push('[UK]');
+      }
+    }
     if (foreignKey) {
       result.push('[FK]');
       result.push(foreignKey.type);
     } else {
       result.push(field.type);
     }
-
     const text = result.join(' ');
     if (foreignKey) {
       // foreign key
