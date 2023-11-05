@@ -153,11 +153,14 @@ export class PlantUmlErdGenerator {
 
     for (const model of dmmf.datamodel.models) {
       results.push(`# ${this._tableName(model)}`);
+      results.push('');
 
       results.push('## Description');
       results.push(model.documentation || '');
+      results.push('');
 
       results.push(`## Columns`);
+      results.push('');
 
       const columns = [
         'Name',
@@ -206,7 +209,7 @@ export class PlantUmlErdGenerator {
       if (this.config.markdownIncludeERD) {
         results.push('');
         results.push('## ER diagram');
-
+        results.push('');
         const filteredDmmf = this.filter(dmmf, model.name);
         const subPumlString = this._generate(filteredDmmf, model.name);
         results.push('```plantuml');

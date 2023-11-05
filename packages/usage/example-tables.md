@@ -79,9 +79,12 @@ Company |o----|| State
 @enduml
 ```
 # User
+
 ## Description
 ユーザ
+
 ## Columns
+
 |Name | Type | Default | Nullable | Children | Parent | Comment|
 |--- | --- | --- | --- | --- | --- | ---|
 |id | Int | autoincrement | false |  |  | |
@@ -95,6 +98,7 @@ Company |o----|| State
 |roleId | String |  | true |  | [Role](#role) | |
 
 ## ER diagram
+
 ```plantuml
 @startuml User
 skinparam linetype ortho
@@ -151,9 +155,12 @@ User |o----|{ Language
 @enduml
 ```
 # Team
+
 ## Description
 Teams
+
 ## Columns
+
 |Name | Type | Default | Nullable | Children | Parent | Comment|
 |--- | --- | --- | --- | --- | --- | ---|
 |id | String | uuid | false | [User](#user), [Company](#company) |  | |
@@ -161,6 +168,7 @@ Teams
 |updated_at | DateTime |  | false |  |  | @HideField({ output: false, input: true })|
 
 ## ER diagram
+
 ```plantuml
 @startuml Team
 skinparam linetype ortho
@@ -201,9 +209,12 @@ Team }o----o{ Company
 @enduml
 ```
 # Company
+
 ## Description
 会社
+
 ## Columns
+
 |Name | Type | Default | Nullable | Children | Parent | Comment|
 |--- | --- | --- | --- | --- | --- | ---|
 |id | String | uuid | false | [User](#user), [Team](#team) |  | |
@@ -212,6 +223,7 @@ Team }o----o{ Company
 |updated_at | DateTime |  | false |  |  | @HideField({ output: false, input: true })|
 
 ## ER diagram
+
 ```plantuml
 @startuml Company
 skinparam linetype ortho
@@ -258,15 +270,19 @@ Company |o----|| State
 @enduml
 ```
 # Role
+
 ## Description
 
+
 ## Columns
+
 |Name | Type | Default | Nullable | Children | Parent | Comment|
 |--- | --- | --- | --- | --- | --- | ---|
 |id | String | uuid | false | [User](#user) |  | |
 |name | String |  | false |  |  | |
 
 ## ER diagram
+
 ```plantuml
 @startuml Role
 skinparam linetype ortho
