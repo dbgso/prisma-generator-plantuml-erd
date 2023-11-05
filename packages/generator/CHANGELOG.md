@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.3.0...v1.3.1) (2023-11-05)
+
+
+### Bug Fixes
+
+* unique column position ([9a6ce1b](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/9a6ce1b8560739e5e82700a6beecf90a01392380))
+
 # [1.3.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.2.1...v1.3.0) (2023-11-05)
 
 
