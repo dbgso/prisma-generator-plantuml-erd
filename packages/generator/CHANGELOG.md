@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.3.1...v1.3.2) (2023-11-06)
+
+
+### Bug Fixes
+
+* vulnerability ([c6d7e77](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/c6d7e777e05cab2edded38cc60171fae8e818dd5))
+
 ## [1.3.1](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.3.0...v1.3.1) (2023-11-05)
 
 
