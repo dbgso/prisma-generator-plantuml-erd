@@ -1,7 +1,8 @@
-import { getDMMF, getSchemaSync } from '@prisma/sdk';
+import { DMMF } from '@prisma/generator-helper';
+import { getDMMF } from '@prisma/internals';
 
 export const getDMMFFromFile = (filepath: string) => {
   return getDMMF({
-    datamodel: getSchemaSync(filepath),
-  });
+    datamodelPath: filepath,
+  }) as Promise<DMMF.Document>;
 };

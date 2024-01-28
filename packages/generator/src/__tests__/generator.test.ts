@@ -1,4 +1,3 @@
-import { getDMMF, getSchemaSync } from '@prisma/sdk';
 import { readFileSync } from 'fs';
 import path from 'path';
 import { getDMMFFromFile } from '../helpers';
@@ -53,13 +52,10 @@ test('enum generation', async () => {
     lineLength: '---',
     debug: 'false',
   });
-
   await generator3.generate(
-    await getDMMF({
-      datamodel: getSchemaSync(
-        path.join(__dirname, './__fixtures__/sample3.prisma'),
-      ),
-    }),
+    await getDMMFFromFile(
+      path.join(__dirname, './__fixtures__/sample3.prisma'),
+    ),
   );
   expect(readFileSync(outputfile3).toString().includes('---')).toBe(true);
 });
