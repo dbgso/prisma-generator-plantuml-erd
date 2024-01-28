@@ -17,6 +17,7 @@ test('enum generation', async () => {
     lineLength: '--',
     exportPerTables: 'true',
     markdownOutput: './tmp/example1.md',
+    asciidocOutput: './tmp/example2.adoc',
   });
   await generator.generate(sampleDMMF);
   const pumlfile1 = readFileSync(outputfile1).toString();
