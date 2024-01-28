@@ -1,12 +1,14 @@
 import { DMMF } from '@prisma/generator-helper';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { z } from 'zod';
+import { AsciiDocGenerator } from './generators/asciidoc-table-definition-generator';
+import { MarkdownTableDefinitionGenerator } from './generators/markdown-table-definition-generator';
 import {
   PlantUmlErdGeneratorConfigs,
   PlantUmlErdGeneratorConfigsInput,
   PlantUmlErdGeneratorConfigsSchema,
 } from './types';
+import { createFilteredDMMFDocument } from './utils';
 
 export class PlantUmlErdGenerator {
   config: PlantUmlErdGeneratorConfigs;
@@ -14,43 +16,11 @@ export class PlantUmlErdGenerator {
     this.config = PlantUmlErdGeneratorConfigsSchema.parse(config);
   }
 
-  /** filtering models and enums */
-  private filter(dmmf: DMMF.Document, targetTableName: string) {
-    if (!targetTableName) return dmmf;
-
-    // target model
-    const target = dmmf.datamodel.models.find(
-      (e) => e.name === targetTableName,
-    );
-    if (!target) return dmmf;
-
-    // enums associated with model
-    const enums = target.fields
-      .filter((f) => f.kind === 'enum')
-      .map((f) => f.type);
-    // models associated with model
-    const models = target.fields
-      .filter((f) => f.kind === 'object')
-      .map((f) => f.type);
-
-    const cloned: DMMF.Document = JSON.parse(JSON.stringify(dmmf));
-
-    // filter to target enums
-    cloned.datamodel.enums = cloned.datamodel.enums.filter((e) =>
-      enums.includes(e.name),
-    );
-    // filter to target models
-    cloned.datamodel.models = cloned.datamodel.models.filter(
-      (e) => models.includes(e.name) || e.name === targetTableName,
-    );
-    return cloned;
-  }
-
   async generate(dmmf: DMMF.Document) {
     if (this.config.debug) {
       await fs.writeFile('/tmp/example.json', JSON.stringify(dmmf, null, 2));
     }
-    const results = this._generate(dmmf, 'erd');
+    const results = this.generateERDiagramText(dmmf, 'erd');
     if (this.config.exportPerTables) {
       results.push(...this.dumpSubRelations(dmmf));
     }
@@ -60,8 +30,15 @@ export class PlantUmlErdGenerator {
     });
     await fs.writeFile(this.config.output, results.join('\n'));
     if (this.config.markdownOutput) {
-      const markdown = await this.dumpMarkdownTable(dmmf);
+      const markdown = new MarkdownTableDefinitionGenerator(this).generate(
+        dmmf,
+      );
       await fs.writeFile(this.config.markdownOutput, markdown.join('\n'));
+    }
+    if (this.config.asciidocOutput) {
+      const adocGenerator = new AsciiDocGenerator(this);
+      const asciidocText = adocGenerator.generate(dmmf);
+      await fs.writeFile(this.config.asciidocOutput, asciidocText.join('\n'));
     }
   }
 
@@ -69,15 +46,18 @@ export class PlantUmlErdGenerator {
     const results: string[] = [];
 
     for (const model of dmmf.datamodel.models) {
-      const filteredDmmf = this.filter(dmmf, model.name);
-      const subPumlString = this._generate(filteredDmmf, model.name);
+      const filteredDmmf = createFilteredDMMFDocument(dmmf, model.name);
+      const subPumlString = this.generateERDiagramText(
+        filteredDmmf,
+        model.name,
+      );
       results.push(...subPumlString);
     }
 
     return results;
   }
 
-  private _generate(dmmf: DMMF.Document, diagramName: string) {
+  generateERDiagramText(dmmf: DMMF.Document, diagramName: string) {
     const results = [`@startuml ${diagramName}`, 'skinparam linetype ortho'];
 
     results.push(...this.drawEnums(dmmf));
@@ -89,164 +69,6 @@ export class PlantUmlErdGenerator {
     results.push(...this.drawEnumRelations(dmmf));
 
     results.push('@enduml');
-    return results;
-  }
-
-  private _tableName(model: DMMF.Model) {
-    if (this.config.usePhysicalTableName) return model.dbName || '';
-    return model.name;
-  }
-
-  private _getDefault(field: DMMF.Field) {
-    const defaultValue = field.default;
-    if (!defaultValue) return '';
-    const validatedDefaultValue = z
-      .object({ name: z.string() })
-      .safeParse(defaultValue);
-    if (validatedDefaultValue.success) {
-      return validatedDefaultValue.data.name;
-    }
-    return defaultValue;
-  }
-
-  private toLink(name?: string) {
-    if (!name) return '';
-    return `[${name}](#${name.toLowerCase()})`;
-  }
-
-  private findParentField(
-    models: DMMF.Model[],
-    baseModelName: string,
-    relationToField: string,
-  ) {
-    const results: string[] = [];
-    for (const model of models) {
-      const foundField = model.fields
-        .filter((e) => e.relationToFields?.length)
-        .find((f) => f.type === baseModelName);
-      if (foundField?.relationToFields?.includes(relationToField)) {
-        results.push(this._tableName(model) || '');
-      }
-    }
-    return results;
-  }
-
-  private dumpMarkdownTable(dmmf: DMMF.Document) {
-    const results: string[] = [];
-    results.push(`# Tables`);
-    for (const model of dmmf.datamodel.models) {
-      const name = this._tableName(model);
-      results.push(`- ${this.toLink(name)}`);
-      if (model.documentation) {
-        results.push(`  - ${model.documentation}`);
-      }
-    }
-    results.push('');
-
-    if (this.config.markdownIncludeERD) {
-      const erd = this._generate(dmmf, 'erd');
-      results.push('# ER diagram');
-      results.push('```plantuml');
-      results.push(...erd);
-      results.push('```');
-    }
-
-    for (const model of dmmf.datamodel.models) {
-      results.push(`# ${this._tableName(model)}`);
-      results.push('');
-
-      results.push('## Description');
-      results.push(model.documentation || '');
-      results.push('');
-
-      results.push(`## Columns`);
-      results.push('');
-
-      const columns = [
-        'Name',
-        'Type',
-        'Default',
-        'Nullable',
-        'Unique',
-        'Children',
-        'Parent',
-        'Comment',
-      ];
-      const rows = model.fields
-        .filter((field) => !field.relationName) //
-        .map((field) => {
-          const relation = this.findParentField(
-            dmmf.datamodel.models,
-            model.name,
-            field.name,
-          );
-
-          const fromField = model.fields.find((e) =>
-            e.relationFromFields?.includes(field.name),
-          );
-          let m: DMMF.Model | undefined = undefined;
-          if (fromField) {
-            const model = dmmf.datamodel.models.find(
-              (e) => e.name === fromField.type,
-            );
-            if (model) m = model;
-          }
-
-          const column: string[] = [
-            field.name,
-            field.type,
-            this._getDefault(field) + '',
-            !field.isRequired + '',
-            (field.isUnique || field.isId) + '' || '',
-            relation.map((r) => this.toLink(r)).join(', '),
-            m ? this.toLink(this._tableName(m) || '') : '',
-            field.documentation || '',
-          ];
-          return column;
-        });
-      results.push(...this.buildMarkdownTable(columns, rows));
-
-      if (model.uniqueIndexes.length > 0) {
-        results.push('');
-        results.push('# Indexes');
-        results.push('');
-
-        const indexes = this.buildMarkdownTable(
-          ['columns', 'index type', 'index name'],
-          model.uniqueIndexes.map((index) => [
-            index.fields.join(','),
-            'unique',
-            index.name || '',
-          ]),
-        );
-        if (model.uniqueIndexes.length > 0) {
-          results.push(...indexes);
-        }
-      }
-
-      // draw er diagram
-      if (this.config.markdownIncludeERD) {
-        results.push('');
-        results.push('## ER diagram');
-        results.push('');
-        const filteredDmmf = this.filter(dmmf, model.name);
-        const subPumlString = this._generate(filteredDmmf, model.name);
-        results.push('```plantuml');
-        results.push(...subPumlString);
-        results.push('```');
-      }
-    }
-    return results;
-  }
-
-  private buildMarkdownTable(columns: string[], rows: string[][]) {
-    const results: string[] = [];
-    results.push('|' + columns.join(' | ') + '|');
-    results.push('|' + columns.map(() => '---').join(' | ') + '|');
-
-    for (const column of rows) {
-      results.push('|' + column.join(' | ') + '|');
-    }
     return results;
   }
 
@@ -345,7 +167,6 @@ export class PlantUmlErdGenerator {
           (model) => model.name === field.type,
         );
         if (!isExists) continue;
-        const toMany = field.isList;
         const relationName = field.relationName;
         // ignore many to many
         if (relationName && manyToManyList.includes(relationName)) {

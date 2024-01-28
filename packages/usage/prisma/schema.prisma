@@ -7,6 +7,8 @@ generator custom_generator {
   markdownOutput       = "./example-tables.md"
   markdownIncludeERD      = true
   showUniqueKeyLabel = true
+  asciidocOutput       = "./example-tables.adoc"
+  asciidocIncludeERD      = true
 }
 
 datasource db {

@@ -120,6 +120,20 @@ example
 If this flag is true, an ER diagram for each table is generated on the table definitions
 The default value is false.
 
+
+# asciidocOutput
+
+If this flag is set, a asciidoc table definition will be generated as well.
+
+example
+- https://raw.githubusercontent.com/dbgso/prisma-generator-plantuml-erd/main/packages/usage/example-tables.adoc
+
+# asciidocIncludeERD
+
+If this flag is true, an ER diagram for each table is generated on the table definitions
+The default value is false.
+
+
 ## Example
 
 The example config is here.
@@ -133,6 +147,8 @@ generator erd_plantuml {
   showUniqueKeyLabel = true
   markdownOutput       = "./example-tables.md"
   markdownIncludeERD      = true
+  asciidocOutput       = "./example-tables.adoc"
+  asciidocIncludeERD      = true
 }
 ```
 

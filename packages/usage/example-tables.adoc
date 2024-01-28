@@ -1,0 +1,315 @@
+:toc: left
+:nofooter:
+== ER diagram
+[plantuml,target=erd,format=svg]
+....
+@startuml erd
+skinparam linetype ortho
+enum "NotificationType" as NotificationType {
+  newPosts
+  newComments
+  newFollowers
+  reply
+  heartOnPost
+  heartOnComment
+  heartOnReply
+}
+enum "Language" as Language {
+  Typescript
+  Javascript
+  Rust
+  Go
+  Python
+  Cpp
+}
+enum "State" as State {
+  Active
+  Pending
+  Banned
+}
+entity "User\nユーザ" as User {
++ id [PK] : Int 
+--
+  * email : [UK] String
+  name : String
+  * languages : Language
+  * created_at : DateTime
+  * updated_at : DateTime
+  # team_id : [FK] Team
+  # companyId : [FK] Company
+  # roleId : [FK] Role
+}
+
+entity "Team\nTeams" as Team {
++ id [PK] : String 
+--
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+entity "Company\n会社" as Company {
++ id [PK] : String 
+--
+  * state : State
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+entity "Role" as Role {
++ id [PK] : String 
+--
+  * name : String
+}
+
+' Relations
+User }o----|| Team
+User }o----o| Company
+User }o----o| Role
+' ManyToMany Relations
+Team }o----o{ Company
+' enum relations
+User |o----|{ Language
+Company |o----|| State
+@enduml
+....
+[[User]]
+== User
+
+=== Description
+ユーザ
+
+=== Columns
+[format="csv", options="header, autowidth"]
+|====
+Name,Type,Default,Nullable,Children,Parent,Comment
+"id","Int","autoincrement","false","",,""
+"email","String","","false","",,""
+"name","String","","true","",,""
+"languages","Language","","false","",,""
+"created_at","DateTime","now","false","",,"@HideField({ output: false, input: true })"
+"updated_at","DateTime","","false","",,"@HideField({ output: false, input: true })"
+"team_id","String","","false","",link:#Team[Team],""
+"companyId","String","","true","",link:#Company[Company],""
+"roleId","String","","true","",link:#Role[Role],""
+|====
+
+=== ER diagram
+[plantuml,target=User,format=svg]
+....
+@startuml User
+skinparam linetype ortho
+enum "Language" as Language {
+  Typescript
+  Javascript
+  Rust
+  Go
+  Python
+  Cpp
+}
+entity "User\nユーザ" as User {
++ id [PK] : Int 
+--
+  * email : [UK] String
+  name : String
+  * languages : Language
+  * created_at : DateTime
+  * updated_at : DateTime
+  # team_id : [FK] Team
+  # companyId : [FK] Company
+  # roleId : [FK] Role
+}
+
+entity "Team\nTeams" as Team {
++ id [PK] : String 
+--
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+entity "Company\n会社" as Company {
++ id [PK] : String 
+--
+  * state : State
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+entity "Role" as Role {
++ id [PK] : String 
+--
+  * name : String
+}
+
+' Relations
+User }o----|| Team
+User }o----o| Company
+User }o----o| Role
+' ManyToMany Relations
+Team }o----o{ Company
+' enum relations
+User |o----|{ Language
+@enduml
+....
+[[Team]]
+== Team
+
+=== Description
+Teams
+
+=== Columns
+[format="csv", options="header, autowidth"]
+|====
+Name,Type,Default,Nullable,Children,Parent,Comment
+"id","String","uuid","false","link:#User[User], link:#Company[Company]",,""
+"created_at","DateTime","now","false","",,"@HideField({ output: false, input: true })"
+"updated_at","DateTime","","false","",,"@HideField({ output: false, input: true })"
+|====
+
+=== ER diagram
+[plantuml,target=Team,format=svg]
+....
+@startuml Team
+skinparam linetype ortho
+entity "User\nユーザ" as User {
++ id [PK] : Int 
+--
+  * email : [UK] String
+  name : String
+  * languages : Language
+  * created_at : DateTime
+  * updated_at : DateTime
+  # team_id : [FK] Team
+  # companyId : [FK] Company
+  # roleId : [FK] Role
+}
+
+entity "Team\nTeams" as Team {
++ id [PK] : String 
+--
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+entity "Company\n会社" as Company {
++ id [PK] : String 
+--
+  * state : State
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+' Relations
+User }o----|| Team
+User }o----o| Company
+' ManyToMany Relations
+Team }o----o{ Company
+' enum relations
+@enduml
+....
+[[Company]]
+== Company
+
+=== Description
+会社
+
+=== Columns
+[format="csv", options="header, autowidth"]
+|====
+Name,Type,Default,Nullable,Children,Parent,Comment
+"id","String","uuid","false","link:#User[User], link:#Team[Team]",,""
+"state","State","","false","",,""
+"created_at","DateTime","now","false","",,"@HideField({ output: false, input: true })"
+"updated_at","DateTime","","false","",,"@HideField({ output: false, input: true })"
+|====
+
+=== ER diagram
+[plantuml,target=Company,format=svg]
+....
+@startuml Company
+skinparam linetype ortho
+enum "State" as State {
+  Active
+  Pending
+  Banned
+}
+entity "User\nユーザ" as User {
++ id [PK] : Int 
+--
+  * email : [UK] String
+  name : String
+  * languages : Language
+  * created_at : DateTime
+  * updated_at : DateTime
+  # team_id : [FK] Team
+  # companyId : [FK] Company
+  # roleId : [FK] Role
+}
+
+entity "Team\nTeams" as Team {
++ id [PK] : String 
+--
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+entity "Company\n会社" as Company {
++ id [PK] : String 
+--
+  * state : State
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+' Relations
+User }o----|| Team
+User }o----o| Company
+' ManyToMany Relations
+Team }o----o{ Company
+' enum relations
+Company |o----|| State
+@enduml
+....
+[[Role]]
+== Role
+
+=== Description
+
+
+=== Columns
+[format="csv", options="header, autowidth"]
+|====
+Name,Type,Default,Nullable,Children,Parent,Comment
+"id","String","uuid","false","link:#User[User]",,""
+"name","String","","false","",,""
+|====
+
+=== ER diagram
+[plantuml,target=Role,format=svg]
+....
+@startuml Role
+skinparam linetype ortho
+entity "User\nユーザ" as User {
++ id [PK] : Int 
+--
+  * email : [UK] String
+  name : String
+  * languages : Language
+  * created_at : DateTime
+  * updated_at : DateTime
+  # team_id : [FK] Team
+  # companyId : [FK] Company
+  # roleId : [FK] Role
+}
+
+entity "Role" as Role {
++ id [PK] : String 
+--
+  * name : String
+}
+
+' Relations
+User }o----o| Role
+' ManyToMany Relations
+' enum relations
+@enduml
+....

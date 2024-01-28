@@ -16,6 +16,8 @@ export const PlantUmlErdGeneratorConfigsSchema = z.object({
   markdownOutput: z.string().optional(),
   markdownIncludeERD: optionalStrinToBooleanSchema(false),
   showUniqueKeyLabel: optionalStrinToBooleanSchema(false),
+  asciidocOutput: z.string().optional(),
+  asciidocIncludeERD: optionalStrinToBooleanSchema(false),
 });
 export type PlantUmlErdGeneratorConfigsInput = z.input<
   typeof PlantUmlErdGeneratorConfigsSchema
