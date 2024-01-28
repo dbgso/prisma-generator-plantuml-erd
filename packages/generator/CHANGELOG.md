@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.3.2...v1.4.0) (2024-01-28)
+
+
+### Features
+
+* add option for generate asciidoc table definition ([8b73749](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/8b73749e1d232807bd19ccc4e71c1b3272d9f536))
+
 ## [1.3.2](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.3.1...v1.3.2) (2023-11-06)
 
 
