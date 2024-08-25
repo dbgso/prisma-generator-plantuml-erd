@@ -185,7 +185,7 @@ export class PlantUmlErdGenerator {
             field,
             model.fields,
           )} ${field.type}`;
-          if (this.config.showForeignKeyOnRelation) {
+          if (this.config.isShowForeignKeyOnRelation) {
             results.push(`${relationLine}: ${foreignKey}`);
           } else {
             results.push(relationLine);

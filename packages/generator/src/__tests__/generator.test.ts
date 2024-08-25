@@ -142,11 +142,11 @@ const optionPatterns: {
     ],
   },
   {
-    key: 'showForeignKeyOnRelation',
+    key: 'isShowForeignKeyOnRelation',
     patterns: [
       {
         options: {
-          showForeignKeyOnRelation: undefined,
+          isShowForeignKeyOnRelation: undefined,
         },
         expected(params) {
           expect(
@@ -156,7 +156,7 @@ const optionPatterns: {
       },
       {
         options: {
-          showForeignKeyOnRelation: 'false',
+          isShowForeignKeyOnRelation: 'false',
         },
         expected(params) {
           expect(
@@ -166,7 +166,7 @@ const optionPatterns: {
       },
       {
         options: {
-          showForeignKeyOnRelation: 'true',
+          isShowForeignKeyOnRelation: 'true',
         },
         expected(params) {
           expect(

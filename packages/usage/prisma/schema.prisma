@@ -10,7 +10,7 @@ generator custom_generator {
   asciidocOutput       = "./example-tables.adoc"
   asciidocIncludeERD      = true
   lineType = "ortho"
-  showForeignKeyOnRelation = "true"
+  isShowForeignKeyOnRelation = "true"
   isLeftToRightDirection = "false"
 }
 
