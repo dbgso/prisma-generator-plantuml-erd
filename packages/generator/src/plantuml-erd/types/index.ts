@@ -14,6 +14,7 @@ export const PlantUmlErdGeneratorConfigsSchema = z.object({
   relationMiniumOne: optionalStrinToBooleanSchema(false),
   isShowForeignKeyOnRelation: optionalStrinToBooleanSchema(false),
   isLeftToRightDirection: optionalStrinToBooleanSchema(false),
+  additionalPlantUMLParams: z.string().optional(),
   debug: optionalStrinToBooleanSchema(false),
   exportPerTables: optionalStrinToBooleanSchema(false),
   markdownOutput: z.string().optional(),

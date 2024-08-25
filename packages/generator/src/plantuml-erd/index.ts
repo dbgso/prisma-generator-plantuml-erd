@@ -66,6 +66,11 @@ export class PlantUmlErdGenerator {
     if (this.config.isLeftToRightDirection) {
       results.push(`left to right direction`);
     }
+    if (this.config.additionalPlantUMLParams) {
+      // split params string with semicolon
+      // hide circle; skinparam backgroundColor transparent
+      results.push(...this.config.additionalPlantUMLParams.split(/;\s*/));
+    }
 
     results.push(...this.drawEnums(dmmf));
 

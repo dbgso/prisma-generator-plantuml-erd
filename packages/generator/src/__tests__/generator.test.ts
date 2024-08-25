@@ -221,6 +221,40 @@ const optionPatterns: {
     key: 'isLeftToRightDirection',
     patterns: [],
   },
+  //
+  {
+    key: 'additionalPlantUMLParams',
+    patterns: [
+      {
+        options: {
+          additionalPlantUMLParams: 'hide circle',
+        },
+        expected(params) {
+          expect(
+            params.pumlString?.includes(
+              'skinparam backgroundColor transparent\nhide circle\n',
+            ),
+          ).toBeTruthy();
+        },
+      },
+      {
+        options: {
+          additionalPlantUMLParams:
+            'hide circle; skinparam backgroundColor transparent',
+        },
+        expected(params) {
+          expect(
+            params.pumlString?.includes(
+              `skinparam backgroundColor transparent
+hide circle
+skinparam backgroundColor transparent
+`,
+            ),
+          ).toBeTruthy();
+        },
+      },
+    ],
+  },
 ];
 
 describe('option pattern test', () => {

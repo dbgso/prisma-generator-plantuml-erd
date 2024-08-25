@@ -12,6 +12,7 @@ generator custom_generator {
   lineType = "ortho"
   isShowForeignKeyOnRelation = "true"
   isLeftToRightDirection = "false"
+  // additionalPlantUMLParams = "hide circle;skinparam classFontColor red;skinparam classFontSize 10;skinparam classFontName Aapex;"
 }
 
 datasource db {
