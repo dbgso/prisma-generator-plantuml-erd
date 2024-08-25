@@ -9,6 +9,10 @@ generator custom_generator {
   showUniqueKeyLabel = true
   asciidocOutput       = "./example-tables.adoc"
   asciidocIncludeERD      = true
+  lineType = "ortho"
+  isShowForeignKeyOnRelation = "true"
+  isLeftToRightDirection = "false"
+  // additionalPlantUMLParams = "hide circle;skinparam classFontColor red;skinparam classFontSize 10;skinparam classFontName Aapex;"
 }
 
 datasource db {

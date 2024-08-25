@@ -58,7 +58,19 @@ export class PlantUmlErdGenerator {
   }
 
   generateERDiagramText(dmmf: DMMF.Document, diagramName: string) {
-    const results = [`@startuml ${diagramName}`, 'skinparam linetype ortho'];
+    const results = [`@startuml ${diagramName}`];
+    if (this.config.lineType !== 'unset') {
+      // blank if unset is selected
+      results.push(`skinparam linetype ${this.config.lineType}`);
+    }
+    if (this.config.isLeftToRightDirection) {
+      results.push(`left to right direction`);
+    }
+    if (this.config.additionalPlantUMLParams) {
+      // split params string with semicolon
+      // hide circle; skinparam backgroundColor transparent
+      results.push(...this.config.additionalPlantUMLParams.split(/;\s*/));
+    }
 
     results.push(...this.drawEnums(dmmf));
 
@@ -173,13 +185,17 @@ export class PlantUmlErdGenerator {
           continue;
         }
         // draw a line from one
-        for (const _ of field.relationFromFields || []) {
-          results.push(
-            `${model.name} ${this._buildRelationLineFromOne(
-              field,
-              model.fields,
-            )} ${field.type}`,
-          );
+        // like `User }o--|| Team: team_id`
+        for (const foreignKey of field.relationFromFields || []) {
+          const relationLine = `${model.name} ${this._buildRelationLineFromOne(
+            field,
+            model.fields,
+          )} ${field.type}`;
+          if (this.config.isShowForeignKeyOnRelation) {
+            results.push(`${relationLine}: ${foreignKey}`);
+          } else {
+            results.push(relationLine);
+          }
         }
       }
     }
