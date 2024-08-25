@@ -231,9 +231,9 @@ const optionPatterns: {
         },
         expected(params) {
           expect(
-            params.pumlString?.includes(
-              'skinparam backgroundColor transparent\nhide circle\n',
-            ),
+            params.pumlString?.includes(`skinparam linetype ortho
+hide circle
+`),
           ).toBeTruthy();
         },
       },
@@ -245,10 +245,9 @@ const optionPatterns: {
         expected(params) {
           expect(
             params.pumlString?.includes(
-              `skinparam backgroundColor transparent
+              `skinparam linetype ortho
 hide circle
-skinparam backgroundColor transparent
-`,
+skinparam backgroundColor transparent`,
             ),
           ).toBeTruthy();
         },
