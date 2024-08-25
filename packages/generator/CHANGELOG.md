@@ -1,3 +1,18 @@
+# [1.5.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.4.0...v1.5.0) (2024-08-25)
+
+
+### Bug Fixes
+
+* lineType bug ([10f9b7e](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/10f9b7e073d4241beb9a28bc1c8b7b2cfd5b1ac0))
+
+
+### Features
+
+* add additionalPlantUMLParams option ([de71e64](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/de71e64076fb19492a193b3cfb6b4e89c3700931))
+* add isLeftToRightDirection option ([7603339](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/760333920fe2d94e96e4cfa5859bbc4d7e638a5c))
+* add lineType option ([03a0f71](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/03a0f7164ad14a4cff51de8f5153ab59aea9810a))
+* add showForeignKeyOnRelation option ([585fcfb](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/585fcfbb8125fd3f4eccefef2689bba89e37d17f))
+
 # [1.4.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.3.2...v1.4.0) (2024-01-28)
 
 
