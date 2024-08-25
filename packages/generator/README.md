@@ -108,12 +108,50 @@ Table1 }o---o| Table3
 If this flag is true, unique column is also labeled as unique key on er diagram, like `[UK]`.
 The default value is false.
 
+# lineType
+
+This parameter is used to change the type of relation line.
+You can choose from the following three options:
+
+- `ortho`
+- `polyline`
+- `unset`
+
+
+The default value is `ortho`.
+
+# isShowForeignKeyOnRelation
+
+When set to true, foreign keys will be displayed on the relation lines.
+The default value is false.
+
+# isLeftToRightDirection
+
+When set to true, PlantUML's `left to right direction` will be specified.
+The ER diagram will be drawn vertically.
+This can be specified to improve the layout if the diagram becomes too wide horizontally.
+
+# additionalPlantUMLParams
+
+This is used when you want to specify options provided by PlantUML that are not individually prepared.
+When setting multiple options, separate them with `;` as shown below, and they will be expanded line by line.
+
+```
+additionalPlantUMLParams = "scale 1280 width; hide circle;skinparam classFontColor red;skinparam classFontSize 10;skinparam classFontName Aapex;"
+hide circle;skinparam classFontColor red;skinparam classFontSize 10;skinparam classFontName Aapex;
+```
+
 # markdownOutput
 
 If this flag is set, a markdown table definition will be generated as well.
 
 example
 - https://raw.githubusercontent.com/dbgso/prisma-generator-plantuml-erd/main/packages/usage/example-tables.md
+
+
+The generated Markdown file can be converted to HTML or PDF using the following Docker image.
+
+https://github.com/dbgso/docker-markdown-to-pdf-with-figures
 
 # markdownIncludeERD
 
@@ -140,6 +178,7 @@ The example config is here.
 
 ```prisma
 generator erd_plantuml {
+  provider   = "prisma-generator-plantuml-erd"
   output               = "path/to/output.puml"
   lineLength           = "----"
   exportPerTables      = true
