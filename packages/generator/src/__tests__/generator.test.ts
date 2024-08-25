@@ -17,6 +17,7 @@ test('enum generation', async () => {
     exportPerTables: 'true',
     markdownOutput: './tmp/example1.md',
     asciidocOutput: './tmp/example2.adoc',
+    showUniqueKeyLabel: 'true',
   });
   await generator.generate(sampleDMMF);
   const pumlfile1 = readFileSync(outputfile1).toString();
@@ -27,6 +28,7 @@ test('enum generation', async () => {
   expect(pumlfile1.includes(`entity "User`)).toBeTruthy();
   expect(pumlfile1.match(/@startuml/g)?.length).toBeGreaterThan(1); // export per table
   expect(pumlfile1.match(/undefined/g)?.length).toBeUndefined();
+  expect(pumlfile1.includes('[UK]')).toBeTruthy();
   const markdown1 = readFileSync('./tmp/example1.md').toString();
   expect(markdown1.length).toBeGreaterThan(0);
   const outputfile2 = './tmp/example2.puml';
@@ -45,6 +47,7 @@ test('enum generation', async () => {
   const markdown2 = readFileSync('./tmp/example2.md').toString();
   expect(markdown2.length).toBeGreaterThan(0);
   expect(markdown2.match(/```plantuml/g)?.length).toBe(7);
+  expect(pumlfile2.includes('[UK]')).toBeFalsy();
 
   const outputfile3 = './tmp/example3.puml';
   const generator3 = new PlantUmlErdGenerator({

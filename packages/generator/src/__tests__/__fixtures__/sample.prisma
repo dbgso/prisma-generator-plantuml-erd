@@ -9,6 +9,8 @@ model User {
   email String  @unique
   name  String?
 
+  user_no Int @unique
+
   languages Language[]
 
   /// @HideField({ output: false, input: true })
