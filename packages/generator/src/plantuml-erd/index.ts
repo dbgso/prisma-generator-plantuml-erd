@@ -58,7 +58,10 @@ export class PlantUmlErdGenerator {
   }
 
   generateERDiagramText(dmmf: DMMF.Document, diagramName: string) {
-    const results = [`@startuml ${diagramName}`, 'skinparam linetype ortho'];
+    const results = [`@startuml ${diagramName}`];
+    if (this.config.lineType) {
+      results.push(`skinparam linetype ${this.config.lineType}`);
+    }
 
     results.push(...this.drawEnums(dmmf));
 

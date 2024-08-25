@@ -3,6 +3,7 @@ import path from 'path';
 import { getDMMFFromFile } from '../helpers';
 
 import { PlantUmlErdGenerator } from '../plantuml-erd';
+import { PlantUmlErdGeneratorConfigsInput } from '../plantuml-erd/types';
 
 test('enum generation', async () => {
   const sampleDMMF = await getDMMFFromFile(
@@ -61,4 +62,74 @@ test('enum generation', async () => {
     ),
   );
   expect(readFileSync(outputfile3).toString().includes('---')).toBe(true);
+});
+
+const patterns: {
+  options: PlantUmlErdGeneratorConfigsInput;
+  expected: (params: {
+    pumlString?: string;
+    markdownString?: string;
+    asciidocString?: string;
+  }) => void;
+}[] = [
+  // plantumlLineType
+  {
+    options: {
+      lineType: undefined,
+    },
+    expected(params) {
+      expect(params.pumlString?.includes(`skinparam linetype`)).toBeFalsy();
+    },
+  },
+  {
+    options: {
+      lineType: 'ortho',
+    },
+    expected(params) {
+      expect(
+        params.pumlString?.includes(`skinparam linetype ortho`),
+      ).toBeTruthy();
+    },
+  },
+  {
+    options: {
+      lineType: 'polyline',
+    },
+    expected(params) {
+      expect(
+        params.pumlString?.includes(`skinparam linetype polyline`),
+      ).toBeTruthy();
+    },
+  },
+];
+
+describe('option pattern test', () => {
+  for (const pattern of patterns) {
+    it(`${JSON.stringify(pattern.options)}`, async () => {
+      const sampleDMMF = await getDMMFFromFile(
+        path.join(__dirname, './__fixtures__/sample.prisma'),
+      );
+
+      const outputfile1 = './tmp/example1.puml';
+      const generator = new PlantUmlErdGenerator({
+        ...pattern.options,
+        output: outputfile1,
+      });
+      await generator.generate(sampleDMMF);
+      const pumlfile1 = readFileSync(outputfile1).toString();
+
+      const asciidocOutput = pattern.options.asciidocOutput
+        ? readFileSync(pattern.options.asciidocOutput).toString()
+        : undefined;
+      const markdownOutput = pattern.options.markdownOutput
+        ? readFileSync(pattern.options.markdownOutput).toString()
+        : undefined;
+
+      pattern.expected({
+        asciidocString: asciidocOutput,
+        markdownString: markdownOutput,
+        pumlString: pumlfile1,
+      });
+    });
+  }
 });
