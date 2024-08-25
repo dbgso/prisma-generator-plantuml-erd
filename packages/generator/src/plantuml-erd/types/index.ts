@@ -13,6 +13,7 @@ export const PlantUmlErdGeneratorConfigsSchema = z.object({
   lineType: z.enum(['ortho', 'polyline']).optional(),
   relationMiniumOne: optionalStrinToBooleanSchema(false),
   showForeignKeyOnRelation: optionalStrinToBooleanSchema(false),
+  isLeftToRightDirection: optionalStrinToBooleanSchema(false),
   debug: optionalStrinToBooleanSchema(false),
   exportPerTables: optionalStrinToBooleanSchema(false),
   markdownOutput: z.string().optional(),

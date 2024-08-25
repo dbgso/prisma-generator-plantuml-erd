@@ -11,6 +11,7 @@ generator custom_generator {
   asciidocIncludeERD      = true
   lineType = "ortho"
   showForeignKeyOnRelation = "true"
+  isLeftToRightDirection = "false"
 }
 
 datasource db {

@@ -62,6 +62,9 @@ export class PlantUmlErdGenerator {
     if (this.config.lineType) {
       results.push(`skinparam linetype ${this.config.lineType}`);
     }
+    if (this.config.isLeftToRightDirection) {
+      results.push(`left to right direction`);
+    }
 
     results.push(...this.drawEnums(dmmf));
 
