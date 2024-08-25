@@ -83,6 +83,16 @@ const optionPatterns: {
           lineType: undefined,
         },
         expected(params) {
+          expect(
+            params.pumlString?.includes(`skinparam linetype ortho`),
+          ).toBeTruthy();
+        },
+      },
+      {
+        options: {
+          lineType: 'unset',
+        },
+        expected(params) {
           expect(params.pumlString?.includes(`skinparam linetype`)).toBeFalsy();
         },
       },
@@ -113,30 +123,26 @@ const optionPatterns: {
     patterns: [
       {
         options: {
-          lineType: undefined,
+          showUniqueKeyLabel: undefined,
         },
         expected(params) {
-          expect(params.pumlString?.includes(`skinparam linetype`)).toBeFalsy();
+          expect(params.pumlString?.includes(`[UK]`)).toBeFalsy();
         },
       },
       {
         options: {
-          lineType: 'ortho',
+          showUniqueKeyLabel: 'true',
         },
         expected(params) {
-          expect(
-            params.pumlString?.includes(`skinparam linetype ortho`),
-          ).toBeTruthy();
+          expect(params.pumlString?.includes(`[UK]`)).toBeTruthy();
         },
       },
       {
         options: {
-          lineType: 'polyline',
+          showUniqueKeyLabel: 'false',
         },
         expected(params) {
-          expect(
-            params.pumlString?.includes(`skinparam linetype polyline`),
-          ).toBeTruthy();
+          expect(params.pumlString?.includes(`[UK]`)).toBeFalsy();
         },
       },
     ],

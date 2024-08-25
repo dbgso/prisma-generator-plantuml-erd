@@ -59,7 +59,8 @@ export class PlantUmlErdGenerator {
 
   generateERDiagramText(dmmf: DMMF.Document, diagramName: string) {
     const results = [`@startuml ${diagramName}`];
-    if (this.config.lineType) {
+    if (this.config.lineType !== 'unset') {
+      // blank if unset is selected
       results.push(`skinparam linetype ${this.config.lineType}`);
     }
     if (this.config.isLeftToRightDirection) {

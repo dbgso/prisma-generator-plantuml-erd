@@ -10,7 +10,7 @@ export const PlantUmlErdGeneratorConfigsSchema = z.object({
   output: z.string().optional().default('./erd.puml'),
   usePhysicalTableName: optionalStrinToBooleanSchema(false),
   lineLength: z.string().regex(/-+/).optional().default('--'),
-  lineType: z.enum(['ortho', 'polyline']).optional(),
+  lineType: z.enum(['unset', 'ortho', 'polyline']).optional().default('ortho'),
   relationMiniumOne: optionalStrinToBooleanSchema(false),
   isShowForeignKeyOnRelation: optionalStrinToBooleanSchema(false),
   isLeftToRightDirection: optionalStrinToBooleanSchema(false),
