@@ -68,9 +68,9 @@ entity "Role" as Role {
 }
 
 ' Relations
-User }o----|| Team
-User }o----o| Company
-User }o----o| Role
+User }o----|| Team: team_id
+User }o----o| Company: companyId
+User }o----o| Role: roleId
 ' ManyToMany Relations
 Team }o----o{ Company
 ' enum relations
@@ -151,9 +151,9 @@ entity "Role" as Role {
 }
 
 ' Relations
-User }o----|| Team
-User }o----o| Company
-User }o----o| Role
+User }o----|| Team: team_id
+User }o----o| Company: companyId
+User }o----o| Role: roleId
 ' ManyToMany Relations
 Team }o----o{ Company
 ' enum relations
@@ -207,8 +207,8 @@ entity "Company\n会社" as Company {
 }
 
 ' Relations
-User }o----|| Team
-User }o----o| Company
+User }o----|| Team: team_id
+User }o----o| Company: companyId
 ' ManyToMany Relations
 Team }o----o{ Company
 ' enum relations
@@ -267,8 +267,8 @@ entity "Company\n会社" as Company {
 }
 
 ' Relations
-User }o----|| Team
-User }o----o| Company
+User }o----|| Team: team_id
+User }o----o| Company: companyId
 ' ManyToMany Relations
 Team }o----o{ Company
 ' enum relations
@@ -312,7 +312,7 @@ entity "Role" as Role {
 }
 
 ' Relations
-User }o----o| Role
+User }o----o| Role: roleId
 ' ManyToMany Relations
 ' enum relations
 @enduml

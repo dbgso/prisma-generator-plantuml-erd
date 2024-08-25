@@ -101,6 +101,27 @@ const patterns: {
       ).toBeTruthy();
     },
   },
+  // showForeignKeyOnRelation
+  {
+    options: {
+      showForeignKeyOnRelation: 'false',
+    },
+    expected(params) {
+      expect(
+        params.pumlString?.includes(`User }o--|| Team: team_id`),
+      ).toBeFalsy();
+    },
+  },
+  {
+    options: {
+      showForeignKeyOnRelation: 'true',
+    },
+    expected(params) {
+      expect(
+        params.pumlString?.includes(`User }o--|| Team: team_id`),
+      ).toBeTruthy();
+    },
+  },
 ];
 
 describe('option pattern test', () => {

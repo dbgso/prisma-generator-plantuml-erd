@@ -176,13 +176,17 @@ export class PlantUmlErdGenerator {
           continue;
         }
         // draw a line from one
-        for (const _ of field.relationFromFields || []) {
-          results.push(
-            `${model.name} ${this._buildRelationLineFromOne(
-              field,
-              model.fields,
-            )} ${field.type}`,
-          );
+        // like `User }o--|| Team: team_id`
+        for (const foreignKey of field.relationFromFields || []) {
+          const relationLine = `${model.name} ${this._buildRelationLineFromOne(
+            field,
+            model.fields,
+          )} ${field.type}`;
+          if (this.config.showForeignKeyOnRelation) {
+            results.push(`${relationLine}: ${foreignKey}`);
+          } else {
+            results.push(relationLine);
+          }
         }
       }
     }
