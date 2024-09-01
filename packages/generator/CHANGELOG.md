@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.5.0...v1.6.0) (2024-09-01)
+
+
+### Features
+
+* update supported version 3 to 5 ([30ea860](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/30ea860ccf2c3ef30bf2a25caec5671536712a64))
+
 # [1.5.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.4.0...v1.5.0) (2024-08-25)
 
 
