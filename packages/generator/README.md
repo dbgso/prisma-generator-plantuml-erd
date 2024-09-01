@@ -194,4 +194,3 @@ generator erd_plantuml {
   asciidocIncludeERD      = true
 }
 ```
-
