@@ -6,9 +6,13 @@
   "devDependencies": {
     "@commitlint/cli": "16.2.3",
     "@commitlint/config-conventional": "16.0.0",
+    "@types/node": "^22.5.1",
     "husky": "7.0.4"
   },
   "scripts": {
     "prepare": "husky install"
+  },
+  "volta": {
+    "node": "22.7.0"
   }
 }

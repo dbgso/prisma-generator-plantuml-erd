@@ -52,7 +52,7 @@ export class AsciiDocGenerator {
         if (field.relationName) continue;
 
         const relation = findParentField(
-          dmmf.datamodel.models,
+          [...dmmf.datamodel.models],
           model.name,
           field.name,
           this.generator.config.usePhysicalTableName,

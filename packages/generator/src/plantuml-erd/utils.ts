@@ -37,17 +37,19 @@ export function createFilteredDMMFDocument(
     .filter((f) => f.kind === 'object')
     .map((f) => f.type);
 
-  const cloned: DMMF.Document = JSON.parse(JSON.stringify(dmmf));
+  // clone dmmf
+  const cloned = JSON.parse(JSON.stringify(dmmf));
 
+  // Since the attributes of datamodel are readonly, enums and models cannot be overwritten without being in an any state, so they are treated as any.
   // filter to target enums
-  cloned.datamodel.enums = cloned.datamodel.enums.filter((e) =>
+  cloned.datamodel.enums = dmmf.datamodel.enums.filter((e) =>
     enums.includes(e.name),
   );
   // filter to target models
-  cloned.datamodel.models = cloned.datamodel.models.filter(
+  cloned.datamodel.models = dmmf.datamodel.models.filter(
     (e) => models.includes(e.name) || e.name === targetTableName,
   );
-  return cloned;
+  return cloned as DMMF.Document;
 }
 
 export function createTableName(

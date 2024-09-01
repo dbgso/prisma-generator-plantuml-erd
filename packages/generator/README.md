@@ -40,11 +40,6 @@ Run the generator
 $ npx prisma generate
 ```
 
-# Versions
-
-This generator only support prisma3.
-If you use the version greater than 4, this plugin is not work.
-
 # Options
 
 ## output

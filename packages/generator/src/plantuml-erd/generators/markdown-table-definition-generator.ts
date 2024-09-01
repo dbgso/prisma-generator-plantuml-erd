@@ -63,7 +63,7 @@ export class MarkdownTableDefinitionGenerator {
         .filter((field) => !field.relationName) //
         .map((field) => {
           const relation = findParentField(
-            dmmf.datamodel.models,
+            [...dmmf.datamodel.models],
             model.name,
             field.name,
             this.generator.config.usePhysicalTableName,
