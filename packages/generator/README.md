@@ -31,19 +31,23 @@ Add to your schema.prisma
 generator erd_plantuml {
   provider   = "prisma-generator-plantuml-erd"
   output = "erd.puml"
+  exportPerTables      = true
+  showUniqueKeyLabel = true
+  isShowForeignKeyOnRelation = true
+  // markdownOutput       = "./example-tables.md"
+  // markdownIncludeERD      = true
+  // asciidocOutput       = "./example-tables.adoc"
+  // asciidocIncludeERD      = true
 }
 ```
+
+*Please refer to the [Options](#options) section for the meaning of each option and set them accordingly.*
 
 Run the generator
 
 ```
 $ npx prisma generate
 ```
-
-# Versions
-
-This generator only support prisma3.
-If you use the version greater than 4, this plugin is not work.
 
 # Options
 

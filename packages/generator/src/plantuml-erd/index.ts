@@ -155,7 +155,7 @@ export class PlantUmlErdGenerator {
       }
       results.push('--');
       for (const field of model.fields.filter((f) => !f.isId)) {
-        const line = this._buildField(field, model.fields);
+        const line = this._buildField(field, [...model.fields]);
         if (line) {
           results.push(`  ${line}`);
         }
@@ -168,7 +168,7 @@ export class PlantUmlErdGenerator {
 
   private drawRelations(dmmf: DMMF.Document) {
     const results: string[] = [];
-    const manyToManyList = this._findManyToMany(dmmf.datamodel.models);
+    const manyToManyList = this._findManyToMany([...dmmf.datamodel.models]);
 
     // add relations
     results.push(`' Relations`);
@@ -189,7 +189,7 @@ export class PlantUmlErdGenerator {
         for (const foreignKey of field.relationFromFields || []) {
           const relationLine = `${model.name} ${this._buildRelationLineFromOne(
             field,
-            model.fields,
+            [...model.fields],
           )} ${field.type}`;
           if (this.config.isShowForeignKeyOnRelation) {
             results.push(`${relationLine}: ${foreignKey}`);

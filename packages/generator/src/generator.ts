@@ -23,7 +23,7 @@ generatorHandler({
   },
 });
 function getOutput(options: GeneratorOptions) {
-  if (options.generator.output) {
+  if (options.generator.output?.value) {
     if (options.generator.output.fromEnvVar === null) {
       return options.generator.output.value;
     }

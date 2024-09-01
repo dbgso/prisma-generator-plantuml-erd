@@ -4,5 +4,5 @@ import { getDMMF } from '@prisma/internals';
 export const getDMMFFromFile = (filepath: string) => {
   return getDMMF({
     datamodelPath: filepath,
-  }) as Promise<DMMF.Document>;
+  }) as unknown as Promise<DMMF.Document>;
 };
