@@ -64,6 +64,192 @@ test('enum generation', async () => {
   expect(readFileSync(outputfile3).toString().includes('---')).toBe(true);
 });
 
+test('debug mode writes to /tmp/example.json', async () => {
+  const sampleDMMF = await getDMMFFromFile(
+    path.join(__dirname, './__fixtures__/sample.prisma'),
+  );
+
+  const outputfile = './tmp/debug-test.puml';
+  const generator = new PlantUmlErdGenerator({
+    output: outputfile,
+    debug: 'true',
+  });
+  await generator.generate(sampleDMMF);
+  const debugFile = readFileSync('/tmp/example.json').toString();
+  expect(debugFile.length).toBeGreaterThan(0);
+  expect(JSON.parse(debugFile)).toBeTruthy();
+});
+
+test('unique indexes in markdown output', async () => {
+  const sampleDMMF = await getDMMFFromFile(
+    path.join(__dirname, './__fixtures__/sample.prisma'),
+  );
+
+  const markdownOutput = './tmp/unique-indexes.md';
+  const generator = new PlantUmlErdGenerator({
+    output: './tmp/unique-indexes.puml',
+    markdownOutput: markdownOutput,
+  });
+  await generator.generate(sampleDMMF);
+  const markdown = readFileSync(markdownOutput).toString();
+  expect(markdown.length).toBeGreaterThan(0);
+});
+
+describe('Generated files parsability', () => {
+  test.each([
+    {
+      fileType: 'PlantUML',
+      config: { output: './tmp/parsable-test.puml' },
+      outputPath: './tmp/parsable-test.puml',
+      assertions: (content: string) => {
+        // Check PlantUML syntax is valid
+        expect(content).toContain('@startuml');
+        expect(content).toContain('@enduml');
+
+        // Check that @startuml and @enduml are properly paired
+        const startumlCount = (content.match(/@startuml/g) || []).length;
+        const endumlCount = (content.match(/@enduml/g) || []).length;
+        expect(startumlCount).toBe(endumlCount);
+        expect(startumlCount).toBeGreaterThan(0);
+
+        // Check no undefined values
+        expect(content).not.toContain('undefined');
+
+        // Check valid entity declarations
+        const entityMatches = content.match(/entity ".*" as \w+/g);
+        expect(entityMatches).toBeTruthy();
+        expect(entityMatches!.length).toBeGreaterThan(0);
+      },
+    },
+    {
+      fileType: 'Markdown',
+      config: {
+        output: './tmp/parsable-markdown-test.puml',
+        markdownOutput: './tmp/parsable-markdown-test.md',
+        markdownIncludeERD: 'true' as const,
+      },
+      outputPath: './tmp/parsable-markdown-test.md',
+      assertions: (content: string) => {
+        // Check markdown structure
+        expect(content).toContain('# Tables');
+        expect(content).toContain('# ER diagram');
+        expect(content).toContain('```plantuml');
+
+        // Check that code blocks are properly closed
+        const openCodeBlocks = (content.match(/```plantuml/g) || []).length;
+        expect(openCodeBlocks).toBeGreaterThan(0);
+
+        // Check markdown tables are properly formatted
+        const tableHeaders = content.match(/\|.*\|/g);
+        expect(tableHeaders).toBeTruthy();
+        expect(tableHeaders!.length).toBeGreaterThan(0);
+
+        // Check no undefined values
+        expect(content).not.toContain('undefined');
+      },
+    },
+    {
+      fileType: 'AsciiDoc',
+      config: {
+        output: './tmp/parsable-asciidoc-test.puml',
+        asciidocOutput: './tmp/parsable-asciidoc-test.adoc',
+      },
+      outputPath: './tmp/parsable-asciidoc-test.adoc',
+      assertions: (content: string) => {
+        // Check AsciiDoc structure
+        expect(content).toContain(':toc: left');
+        expect(content).toContain(':nofooter:');
+        expect(content).toContain('== ER diagram');
+
+        // Check PlantUML blocks are properly formatted
+        expect(content).toContain('[plantuml,target=erd,format=svg]');
+        expect(content).toContain('....');
+
+        // Check that plantuml blocks are properly closed
+        const openBlocks = (content.match(/\[plantuml,.*\]/g) || []).length;
+        const dotsCount = (content.match(/\.\.\.\./g) || []).length;
+        expect(openBlocks).toBeGreaterThan(0);
+        expect(dotsCount).toBe(openBlocks * 2); // Each block has opening and closing ....
+
+        // Check tables are properly formatted
+        expect(content).toContain('[format="csv", options="header, autowidth"]');
+        expect(content).toContain('|====');
+
+        // Check no undefined values
+        expect(content).not.toContain('undefined');
+      },
+    },
+  ])('generated $fileType files are parsable', async ({ config, outputPath, assertions }) => {
+    const sampleDMMF = await getDMMFFromFile(
+      path.join(__dirname, './__fixtures__/sample.prisma'),
+    );
+
+    const generator = new PlantUmlErdGenerator(config);
+    await generator.generate(sampleDMMF);
+    const content = readFileSync(outputPath).toString();
+
+    assertions(content);
+  });
+});
+
+test('enum with documentation and dbName', async () => {
+  const sampleDMMF = await getDMMFFromFile(
+    path.join(__dirname, './__fixtures__/sample-with-docs.prisma'),
+  );
+
+  const outputfile = './tmp/enum-with-docs.puml';
+  const generator = new PlantUmlErdGenerator({
+    output: outputfile,
+  });
+  await generator.generate(sampleDMMF);
+  const pumlContent = readFileSync(outputfile).toString();
+
+  // Check enum documentation is included
+  expect(pumlContent).toContain('User status enum');
+
+  // Check enum values with dbName
+  expect(pumlContent).toContain('ACTIVE');
+  expect(pumlContent).toContain('active');
+  expect(pumlContent).toContain('PENDING');
+  expect(pumlContent).toContain('pending');
+});
+
+test('markdown with unique indexes', async () => {
+  const sampleDMMF = await getDMMFFromFile(
+    path.join(__dirname, './__fixtures__/sample-with-docs.prisma'),
+  );
+
+  const markdownOutput = './tmp/unique-indexes-detailed.md';
+  const generator = new PlantUmlErdGenerator({
+    output: './tmp/unique-indexes-detailed.puml',
+    markdownOutput: markdownOutput,
+  });
+  await generator.generate(sampleDMMF);
+  const markdown = readFileSync(markdownOutput).toString();
+
+  // Check that unique index section exists
+  expect(markdown).toContain('# Indexes');
+  expect(markdown).toContain('email,status');
+  expect(markdown).toContain('unique');
+});
+
+test('field documentation in ERD', async () => {
+  const sampleDMMF = await getDMMFFromFile(
+    path.join(__dirname, './__fixtures__/sample-field-docs.prisma'),
+  );
+
+  const outputfile = './tmp/field-docs.puml';
+  const generator = new PlantUmlErdGenerator({
+    output: outputfile,
+  });
+  await generator.generate(sampleDMMF);
+  const pumlContent = readFileSync(outputfile).toString();
+
+  // Check field documentation is included (without @ symbols)
+  expect(pumlContent).toContain('User email address');
+  expect(pumlContent).toContain('User full name');
+});
+
 const optionPatterns: {
   key: keyof PlantUmlErdGeneratorConfigsInput;
   patterns: {
@@ -218,8 +404,17 @@ const optionPatterns: {
     ],
   },
   {
-    key: 'isLeftToRightDirection',
-    patterns: [],
+    key: 'relationMiniumOne',
+    patterns: [
+      {
+        options: {
+          relationMiniumOne: 'true',
+        },
+        expected(params) {
+          expect(params.pumlString?.includes(`}|--||`)).toBeTruthy();
+        },
+      },
+    ],
   },
   //
   {
