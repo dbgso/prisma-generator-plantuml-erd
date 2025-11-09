@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs';
+import os from 'os';
 import path from 'path';
 import { getDMMFFromFile } from '../helpers';
 
@@ -75,7 +76,8 @@ test('debug mode writes to /tmp/example.json', async () => {
     debug: 'true',
   });
   await generator.generate(sampleDMMF);
-  const debugFile = readFileSync('/tmp/example.json').toString();
+  const debugPath = path.join(os.tmpdir(), 'example.json');
+  const debugFile = readFileSync(debugPath).toString();
   expect(debugFile.length).toBeGreaterThan(0);
   expect(JSON.parse(debugFile)).toBeTruthy();
 });

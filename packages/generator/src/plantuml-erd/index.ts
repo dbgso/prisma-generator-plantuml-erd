@@ -1,5 +1,6 @@
 import { DMMF } from '@prisma/generator-helper';
 import { promises as fs } from 'fs';
+import os from 'os';
 import path from 'path';
 import { AsciiDocGenerator } from './generators/asciidoc-table-definition-generator';
 import { MarkdownTableDefinitionGenerator } from './generators/markdown-table-definition-generator';
@@ -18,7 +19,8 @@ export class PlantUmlErdGenerator {
 
   async generate(dmmf: DMMF.Document) {
     if (this.config.debug) {
-      await fs.writeFile('/tmp/example.json', JSON.stringify(dmmf, null, 2));
+      const debugPath = path.join(os.tmpdir(), 'example.json');
+      await fs.writeFile(debugPath, JSON.stringify(dmmf, null, 2));
     }
     const results = this.generateERDiagramText(dmmf, 'erd');
     if (this.config.exportPerTables) {
