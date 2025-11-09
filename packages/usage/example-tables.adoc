@@ -160,7 +160,7 @@ Teams
 [format="csv", options="header, autowidth"]
 |====
 Name,Type,Default,Nullable,Children,Parent,Comment
-"id","String","uuid","false","link:#User[User], link:#Company[Company]",,""
+"id","String","uuid","false","link:#User[User]",,""
 "created_at","DateTime","now","false","",,"@HideField({ output: false, input: true })"
 "updated_at","DateTime","","false","",,"@HideField({ output: false, input: true })"
 |====
@@ -216,7 +216,7 @@ Team }o----o{ Company
 [format="csv", options="header, autowidth"]
 |====
 Name,Type,Default,Nullable,Children,Parent,Comment
-"id","String","uuid","false","link:#User[User], link:#Team[Team]",,""
+"id","String","uuid","false","link:#User[User]",,""
 "state","State","","false","",,""
 "created_at","DateTime","now","false","",,"@HideField({ output: false, input: true })"
 "updated_at","DateTime","","false","",,"@HideField({ output: false, input: true })"

@@ -23,6 +23,8 @@ You can generate the plantuml source code from the schema.prisma.
 npm i -D prisma-generator-plantuml-erd
 # or
 yarn add -D prisma-generator-plantuml-erd
+# or
+pnpm add -D prisma-generator-plantuml-erd
 ```
 
 Add to your schema.prisma
@@ -50,6 +52,50 @@ $ npx prisma generate
 ```
 
 # Options
+
+## enabled
+
+Controls whether ER diagram generation is enabled or disabled.
+The default value is true.
+
+You can disable generation in two ways:
+
+### 1. Via schema.prisma config
+```prisma
+generator erd_plantuml {
+  provider = "prisma-generator-plantuml-erd"
+  enabled = false  // Permanently disable generation
+}
+```
+
+### 2. Via environment variable (recommended for dynamic control)
+Set the `DISABLE_PLANTUML_ERD_GENERATION` environment variable to disable generation:
+
+```bash
+# Disable generation (local development)
+DISABLE_PLANTUML_ERD_GENERATION=true npx prisma generate
+
+# Or using 1 instead of true
+DISABLE_PLANTUML_ERD_GENERATION=1 npx prisma generate
+
+# Enable generation (default, CI environment)
+npx prisma generate
+```
+
+**Use case example:**
+```json
+// package.json
+{
+  "scripts": {
+    "prisma:generate": "DISABLE_PLANTUML_ERD_GENERATION=true prisma generate",
+    "prisma:generate:ci": "prisma generate"
+  }
+}
+```
+
+**Priority:** Environment variable takes precedence over schema.prisma config.
+
+This allows you to skip heavy ER diagram generation during local development while keeping it enabled in CI environments without modifying your schema.prisma file.
 
 ## output
 
@@ -128,6 +174,17 @@ The default value is `ortho`.
 
 When set to true, foreign keys will be displayed on the relation lines.
 The default value is false.
+
+# relationMiniumOne
+
+When set to true, the minimum cardinality in relations will be set to one (`|`) instead of zero (`o`).
+The default value is false.
+
+In PlantUML notation:
+- `false` (default): `Table1 }o--o| Table2` (zero or more)
+- `true`: `Table1 }|--|| Table2` (one or more)
+
+This is useful when all your relations require at least one record.
 
 # isLeftToRightDirection
 
