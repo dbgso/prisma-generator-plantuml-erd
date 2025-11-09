@@ -16,6 +16,7 @@
     "node": "22.7.0"
   },
   "overrides": {
-    "semver": "7.6.3"
+    "semver": "7.6.3",
+    "cross-spawn": "7.0.6"
   }
 }
