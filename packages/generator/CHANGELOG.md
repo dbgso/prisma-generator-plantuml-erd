@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.7.0...v1.7.1) (2025-11-09)
+
+
+### Bug Fixes
+
+* use 'pnpm exec tsc' instead of 'npx tsc' to avoid wrong package installation ([#83](https://github.com/dbgso/prisma-generator-plantuml-erd/issues/83)) ([bf645fc](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/bf645fcd24108c309b7a504b51ea4f226d2cf6ac))
+
 # [1.7.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.6.0...v1.7.0) (2025-11-09)
 
 
