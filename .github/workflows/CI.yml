@@ -12,25 +12,26 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 20.x
+          - 24.x
         os:
           - ubuntu-latest
           - windows-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Use Node.js ${{matrix.node-version}}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: actions/cache@v2
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          cache: 'pnpm'
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: Run Tests 🧪
         working-directory: ./packages/generator
-        run: npm run test
+        run: pnpm run test
   Publish:
     runs-on: ubuntu-latest
     needs:
@@ -38,20 +39,21 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' }}
     steps:
       - uses: actions/checkout@v2
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 20.x
+          node-version: 24.x
           registry-url: https://registry.npmjs.org
-      - uses: actions/cache@v2
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          cache: 'pnpm'
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: Publish 🚀
         working-directory: ./packages/generator
-        run: npx semantic-release
+        run: pnpm exec semantic-release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

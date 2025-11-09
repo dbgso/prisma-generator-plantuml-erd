@@ -13,10 +13,13 @@
     "prepare": "husky install"
   },
   "volta": {
-    "node": "22.7.0"
+    "node": "24.11.0"
   },
-  "overrides": {
-    "semver": "7.6.3",
-    "cross-spawn": "7.0.6"
+  "pnpm": {
+    "overrides": {
+      "semver": "7.6.3",
+      "cross-spawn": "7.0.6",
+      "npm": "11.6.2"
+    }
   }
 }
