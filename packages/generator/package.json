@@ -65,14 +65,8 @@
       [
         "@semantic-release/exec",
         {
-          "prepareCmd": "node -e \"const pkg=require('./package.json');pkg.version='${nextRelease.version}';require('fs').writeFileSync('./package.json',JSON.stringify(pkg,null,2)+'\\n')\""
-        }
-      ],
-      [
-        "@semantic-release/npm",
-        {
-          "npmPublish": true,
-          "tarballDir": "dist"
+          "prepareCmd": "node -e \"const pkg=require('./package.json');pkg.version='${nextRelease.version}';require('fs').writeFileSync('./package.json',JSON.stringify(pkg,null,2)+'\\n')\"",
+          "publishCmd": "pnpm publish --access public --no-git-checks"
         }
       ],
       [
