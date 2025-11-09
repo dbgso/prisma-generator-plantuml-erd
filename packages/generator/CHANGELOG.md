@@ -1,3 +1,18 @@
+# [1.7.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.6.0...v1.7.0) (2025-11-09)
+
+
+### Bug Fixes
+
+* configure semantic-release pkgRoot for pnpm monorepo compatibility ([#79](https://github.com/dbgso/prisma-generator-plantuml-erd/issues/79)) ([d3bae4f](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/d3bae4f0e6d6bea729d8903c0a6592cd06efac1e))
+* replace @semantic-release/npm with pnpm publish to avoid npm version error ([#82](https://github.com/dbgso/prisma-generator-plantuml-erd/issues/82)) ([bacb4de](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/bacb4defa6481ac164966ebb34335cea1f7c1c11))
+* use @semantic-release/exec to avoid npm version error in pnpm workspace ([#81](https://github.com/dbgso/prisma-generator-plantuml-erd/issues/81)) ([e70247a](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/e70247af141207cb046f7f23af595f7c703cfc8c))
+* use working-directory instead of pkgRoot for semantic-release ([#80](https://github.com/dbgso/prisma-generator-plantuml-erd/issues/80)) ([b3b7a4c](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/b3b7a4ca6059d6abee3151a36f011ef82a5300e9))
+
+
+### Features
+
+* Add enabled option, migrate to pnpm, and achieve zero vulnerabilities ([#78](https://github.com/dbgso/prisma-generator-plantuml-erd/issues/78)) ([fe8d0ca](https://github.com/dbgso/prisma-generator-plantuml-erd/commit/fe8d0caa164da601156d42f7669a252b173d1c68))
+
 # [1.6.0](https://github.com/dbgso/prisma-generator-plantuml-erd/compare/v1.5.0...v1.6.0) (2024-09-01)
 
 
