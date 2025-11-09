@@ -50,7 +50,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Publish 🚀
-        run: pnpm --filter prisma-generator-plantuml-erd exec semantic-release
+        working-directory: ./packages/generator
+        run: npx semantic-release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
