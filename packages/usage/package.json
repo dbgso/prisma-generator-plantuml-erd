@@ -10,8 +10,8 @@
   },
   "devDependencies": {
     "@types/node": "16.11.7",
-    "prisma": "^4.16.2",
-    "prisma-generator-plantuml-erd": "1.0.0",
+    "prisma": "4.16.2",
+    "prisma-generator-plantuml-erd": "file:../generator",
     "typescript": "4.5.2"
   }
 }
