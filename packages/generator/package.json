@@ -14,7 +14,7 @@
     "start": "node dist/bin.js",
     "dev": "npx tsc -w",
     "build": "npx tsc",
-    "prepack": "yarn build",
+    "prepack": "pnpm build",
     "test": "jest"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
   "devDependencies": {
     "@prisma/internals": "5.19.0",
     "@semantic-release/changelog": "6.0.1",
+    "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "@types/jest": "29.2.2",
     "@types/node": "22.5.1",
@@ -61,8 +62,19 @@
           "changelogFile": "CHANGELOG.md"
         }
       ],
-      "@semantic-release/npm",
-      "@semantic-release/github",
+      [
+        "@semantic-release/exec",
+        {
+          "prepareCmd": "node -e \"const pkg=require('./package.json');pkg.version='${nextRelease.version}';require('fs').writeFileSync('./package.json',JSON.stringify(pkg,null,2)+'\\n')\""
+        }
+      ],
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": true,
+          "tarballDir": "dist"
+        }
+      ],
       [
         "@semantic-release/git",
         {
@@ -72,7 +84,8 @@
           ],
           "message": "chore(release): set `package.json` to ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
         }
-      ]
+      ],
+      "@semantic-release/github"
     ]
   },
   "volta": {
