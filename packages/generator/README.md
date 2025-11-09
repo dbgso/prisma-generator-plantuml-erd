@@ -69,14 +69,14 @@ generator erd_plantuml {
 ```
 
 ### 2. Via environment variable (recommended for dynamic control)
-Set the `DISABLE_PRISMA_ERD_GENERATION` environment variable to disable generation:
+Set the `DISABLE_PLANTUML_ERD_GENERATION` environment variable to disable generation:
 
 ```bash
 # Disable generation (local development)
-DISABLE_PRISMA_ERD_GENERATION=true npx prisma generate
+DISABLE_PLANTUML_ERD_GENERATION=true npx prisma generate
 
 # Or using 1 instead of true
-DISABLE_PRISMA_ERD_GENERATION=1 npx prisma generate
+DISABLE_PLANTUML_ERD_GENERATION=1 npx prisma generate
 
 # Enable generation (default, CI environment)
 npx prisma generate
@@ -87,7 +87,7 @@ npx prisma generate
 // package.json
 {
   "scripts": {
-    "prisma:generate": "DISABLE_PRISMA_ERD_GENERATION=true prisma generate",
+    "prisma:generate": "DISABLE_PLANTUML_ERD_GENERATION=true prisma generate",
     "prisma:generate:ci": "prisma generate"
   }
 }

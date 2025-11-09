@@ -15,9 +15,9 @@ generatorHandler({
   },
   onGenerate: async (options: GeneratorOptions) => {
     // Check if generation is disabled via environment variable (takes precedence)
-    const disableEnvVar = environments.DISABLE_PRISMA_ERD_GENERATION;
+    const disableEnvVar = environments.DISABLE_PLANTUML_ERD_GENERATION;
     if (disableEnvVar === 'true' || disableEnvVar === '1') {
-      console.log('ER diagram generation is disabled by DISABLE_PRISMA_ERD_GENERATION environment variable');
+      console.log('ER diagram generation is disabled by DISABLE_PLANTUML_ERD_GENERATION environment variable');
       return;
     }
 
