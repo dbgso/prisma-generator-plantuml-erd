@@ -23,6 +23,8 @@ You can generate the plantuml source code from the schema.prisma.
 npm i -D prisma-generator-plantuml-erd
 # or
 yarn add -D prisma-generator-plantuml-erd
+# or
+pnpm add -D prisma-generator-plantuml-erd
 ```
 
 Add to your schema.prisma
@@ -128,6 +130,17 @@ The default value is `ortho`.
 
 When set to true, foreign keys will be displayed on the relation lines.
 The default value is false.
+
+# relationMiniumOne
+
+When set to true, the minimum cardinality in relations will be set to one (`|`) instead of zero (`o`).
+The default value is false.
+
+In PlantUML notation:
+- `false` (default): `Table1 }o--o| Table2` (zero or more)
+- `true`: `Table1 }|--|| Table2` (one or more)
+
+This is useful when all your relations require at least one record.
 
 # isLeftToRightDirection
 
