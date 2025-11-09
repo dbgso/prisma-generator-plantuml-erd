@@ -7,6 +7,7 @@ const optionalStrinToBooleanSchema = (flg: boolean) =>
     .transform((args) => args === 'true');
 
 export const PlantUmlErdGeneratorConfigsSchema = z.object({
+  enabled: optionalStrinToBooleanSchema(true),
   output: z.string().optional().default('./erd.puml'),
   usePhysicalTableName: optionalStrinToBooleanSchema(false),
   lineLength: z.string().regex(/-+/).optional().default('--'),

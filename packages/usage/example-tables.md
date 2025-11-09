@@ -169,7 +169,7 @@ Teams
 
 |Name | Type | Default | Nullable | Unique | Children | Parent | Comment|
 |--- | --- | --- | --- | --- | --- | --- | ---|
-|id | String | uuid | false | true | [User](#user), [Company](#company) |  | |
+|id | String | uuid | false | true | [User](#user) |  | |
 |created_at | DateTime | now | false | false |  |  | @HideField({ output: false, input: true })|
 |updated_at | DateTime |  | false | false |  |  | @HideField({ output: false, input: true })|
 
@@ -223,7 +223,7 @@ Team }o----o{ Company
 
 |Name | Type | Default | Nullable | Unique | Children | Parent | Comment|
 |--- | --- | --- | --- | --- | --- | --- | ---|
-|id | String | uuid | false | true | [User](#user), [Team](#team) |  | |
+|id | String | uuid | false | true | [User](#user) |  | |
 |state | State |  | false | false |  |  | |
 |created_at | DateTime | now | false | false |  |  | @HideField({ output: false, input: true })|
 |updated_at | DateTime |  | false | false |  |  | @HideField({ output: false, input: true })|
